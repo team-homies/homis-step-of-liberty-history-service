@@ -16,11 +16,11 @@ func GetCommentPath() *core.InternalApi {
 	once.Do(func() {
 		instance = &core.InternalApi{
 			Comment: core.CommentPath{
-				GetComment:    "/comment",
-				GetComments:   "/comment/list",
-				CreateComment: "/comment",
-				UpdateComment: "/comment",
-				DeleteComment: "/comment",
+				GetComment:    "/:id/comments",
+				GetComments:   "/:id/comments/list",
+				CreateComment: "/:id/comments",
+				UpdateComment: "/:id/comments",
+				DeleteComment: "/:id/comments",
 			},
 		}
 	})

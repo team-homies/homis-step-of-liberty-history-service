@@ -8,12 +8,12 @@ import (
 )
 
 // router에 들어가는 함수
-// comment.SetApis(app.Group("/api"))
-func SetApis(route fiber.Router) {
+func SetCommentApis(route fiber.Router) {
+	// /history
 	h := handler.NewCommentHandler()
 
 	// 혈서 목록
-	// /comment. , handler.NewCommentHandler().GetComment
+	//  /comments
 	route.Get(constant.GetCommentPath().Comment.GetComment, h.GetComment)
 	// 혈서 목록s
 	route.Get(constant.GetCommentPath().Comment.GetComments, h.GetComments)

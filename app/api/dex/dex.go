@@ -8,8 +8,7 @@ import (
 )
 
 // router에 들어가는 함수
-// comment.SetApis(app.Group("/api"))
-func SetApis(route fiber.Router) {
+func SetDexApis(route fiber.Router) {
 	h := handler.NewDexHandler()
 
 	// 도감 목록
