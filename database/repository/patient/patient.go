@@ -23,11 +23,7 @@ func NewPatientRepository(db *gorm.DB) PatientRepository {
 	return &gormPatientRepository{db}
 }
 
-func (g *gormPatientRepository) Create(patient *entity.Patient) error {
-	panic("")
-}
-
-func (g *gormPatientRepository) Delete(id uint) error {
+func (g *gormPatientRepository) GetByID(id uint) (*entity.Patient, error) {
 	panic("")
 }
 
@@ -35,10 +31,14 @@ func (g *gormPatientRepository) GetAll() ([]entity.Patient, error) {
 	panic("")
 }
 
-func (g *gormPatientRepository) GetByID(id uint) (*entity.Patient, error) {
+func (g *gormPatientRepository) Create(patient *entity.Patient) error {
 	panic("")
 }
 
 func (g *gormPatientRepository) Update(patient *entity.Patient) error {
+	panic("")
+}
+
+func (g *gormPatientRepository) Delete(id uint) error {
 	panic("")
 }

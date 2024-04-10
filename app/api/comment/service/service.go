@@ -4,11 +4,11 @@ import "main/app/api/comment/resource"
 
 // 서비스 인터페이스
 type CommentService interface {
-	GetComment(req *resource.GetCommentRequest) (res *resource.GetCommentResponse, err error)
-	GetComments() (resource.GetCommentsResponse, error)
-	CreateComment(req *resource.CreateCommentRequest) error
-	UpdateComment(req *resource.UpdateCommentRequest) (res *resource.UpdateCommentResponse, err error)
-	DeleteComment(id int) error
+	GetComment() (res *resource.GetCommentResponse, err error)
+	GetComments() (res *resource.GetCommentsResponse, err error)
+	CreateComment(req *resource.CreateCommentRequest) (err error)
+	UpdateComment(req *resource.UpdateCommentRequest) (err error)
+	DeleteComment(req *resource.DeleteCommentRequest) (res *resource.DeleteCommentResponse, err error)
 }
 
 // comment 서비스 함수
@@ -24,6 +24,45 @@ type commentService struct {
 }
 
 func (s *commentService) GetComment(req *resource.GetCommentRequest) (res *resource.GetCommentResponse, err error) {
+	res = new(resource.GetCommentResponse)
+	res = &resource.GetCommentResponse{
+		Comment: resource.CommentResource{
+			Id:       1,
+			UserId:   1,
+			UserName: "논현동",
+			Content:  "time to go to bed",
+		},
+	}
+
+	return
+}
+func (s *commentService) CreateComment(req *resource.GetCommentRequest) (res *resource.GetCommentResponse, err error) {
+	res = new(resource.GetCommentResponse)
+	res = &resource.GetCommentResponse{
+		Comment: resource.CommentResource{
+			Id:       1,
+			UserId:   1,
+			UserName: "논현동",
+			Content:  "time to go to bed",
+		},
+	}
+
+	return
+}
+func (s *commentService) UpdateComment(req *resource.GetCommentRequest) (res *resource.GetCommentResponse, err error) {
+	res = new(resource.GetCommentResponse)
+	res = &resource.GetCommentResponse{
+		Comment: resource.CommentResource{
+			Id:       1,
+			UserId:   1,
+			UserName: "논현동",
+			Content:  "time to go to bed",
+		},
+	}
+
+	return
+}
+func (s *commentService) DeleteComment(req *resource.GetCommentRequest) (res *resource.GetCommentResponse, err error) {
 	res = new(resource.GetCommentResponse)
 	res = &resource.GetCommentResponse{
 		Comment: resource.CommentResource{
