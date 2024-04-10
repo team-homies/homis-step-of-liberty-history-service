@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// 레포지토리 인터페이스
 type PatientRepository interface {
 	GetAll() ([]entity.Patient, error)
 	GetByID(id uint) (*entity.Patient, error)

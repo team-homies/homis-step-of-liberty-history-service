@@ -15,7 +15,7 @@ func (f *FiberKit) GetLocalsInt(key string) int {
 }
 
 func (f *FiberKit) HttpOK(data any) error {
-	return f.C.JSON(data)
+	return f.C.JSON(data) // 제이슨으로 변환 및 response
 }
 
 func (f *FiberKit) HttpFail(data any, errCode int) error {

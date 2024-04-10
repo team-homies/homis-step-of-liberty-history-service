@@ -1,16 +1,16 @@
 📦homis-boilerplate
  ┣ 📂app
  ┃ ┣ 📂api
- ┃ ┃ ┣ 📂patient
+ ┃ ┃ ┣ 📂comment
  ┃ ┃ ┃ ┣ 📂handler
- ┃ ┃ ┃ ┃ ┗ 📜handler.go
+ ┃ ┃ ┃ ┃ ┗ 📜handler.go //
  ┃ ┃ ┃ ┣ 📂resource
- ┃ ┃ ┃ ┃ ┣ 📜patient.go
+ ┃ ┃ ┃ ┃ ┣ 📜comment.go
  ┃ ┃ ┃ ┃ ┣ 📜request.go
  ┃ ┃ ┃ ┃ ┗ 📜response.go
  ┃ ┃ ┃ ┣ 📂service
  ┃ ┃ ┃ ┃ ┗ 📜service.go
- ┃ ┃ ┃ ┗ 📜patient.go
+ ┃ ┃ ┃ ┗ 📜comment.go
  ┃ ┃ ┗ 📜router.go
  ┃ ┣ 📂grpc
  ┃ ┃ ┣ 📂proto
@@ -48,10 +48,10 @@
  ┃ ┗ 📜constant.go
  ┣ 📂database
  ┃ ┣ 📂entity
- ┃ ┃ ┗ 📜patient.go
+ ┃ ┃ ┗ 📜comment.go
  ┃ ┣ 📂repository
- ┃ ┃ ┣ 📂patient
- ┃ ┃ ┃ ┗ 📜patient.go
+ ┃ ┃ ┣ 📂comment
+ ┃ ┃ ┃ ┗ 📜comment.go
  ┃ ┃ ┗ 📜repository.go
  ┃ ┗ 📜connection.go
  ┣ 📂external
@@ -59,5 +59,5 @@
  ┣ 📜.gitignore
  ┣ 📜go.mod
  ┣ 📜go.sum
- ┣ 📜main.go
+ ┣ 📜main.go 
  ┗ 📜tree

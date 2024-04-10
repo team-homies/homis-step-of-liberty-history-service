@@ -4,6 +4,15 @@ syntax = "proto3";
 package grpc;
 option go_package= "main/app/grpc/proto/dosage";
 
+// go에서 gRPC를 사용하기 위해 필요한 과정
+// 1. protobuf를 이용해 IDL 파일 작성(.proto)
+//    : service, rpc, message 정의
+// 2. protoc 툴을 설치하고 이를 사용하여 protobuf 파일(.proto) 컴파일
+//    : name.protobuf -> name.pb.go
+// 3. go에서 protobuf go 파일(.pb.go) import하여 라이브러리처럼 사용
+
+// service 및 rpc 정의
+// rpc에서 call, return 인자로 사용할 message 정의
 service DosageService {
   rpc GetDosageById (DosageRequest) returns (DosageResponse) {}
 }
