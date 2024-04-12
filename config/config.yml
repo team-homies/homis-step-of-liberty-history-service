@@ -19,7 +19,7 @@
 #   database : "history"
 #   rw:
 #     user: "history_rw"
-#     pw: "5t!WQOQnYn22!U7"
+#     password: "5t!WQOQnYn22!U7"
 #   ro:
 #     user: "history_ro"
-#     pw: "R+s_jGL+coLeYB="
+#     password: "R+s_jGL+coLeYB="
