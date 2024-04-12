@@ -14,6 +14,9 @@ func init() {
 }
 
 func main() {
+	// var err error
+	// database.DB, err = database.InitDB()
+
 	// fiber
 	fiber := app.InitFiber()
 

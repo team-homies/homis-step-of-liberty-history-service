@@ -10,7 +10,7 @@ import (
 
 // 핸들러 인터페이스 선언 (메소드와 반환형 기재)
 type handler interface {
-	GetComments(c *fiber.Ctx) error
+	GetAllComment(c *fiber.Ctx) error
 	CreateComment(c *fiber.Ctx) error
 	UpdateComment(c *fiber.Ctx) error
 	DeleteComment(c *fiber.Ctx) error
@@ -32,13 +32,13 @@ func NewCommentHandler() handler {
 
 // comment.go에서 라우터에 들어가는 함수
 // (h *commentHandler) 리시버함수를 만드는 방법
-// GetComment 리시버함수
+// GetAllComment 리시버함수
 
-func (h *commentHandler) GetComments(c *fiber.Ctx) error {
-	ctx := fiberkit.FiberKit{C: c}          // 파이버객체 생성
-	req := new(resource.GetCommentsRequest) // 사용자에게서 받은 요청값을 req에 받는다
-	ctx.C.QueryParser(req)                  // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	res, err := h.service.GetComments()
+func (h *commentHandler) GetAllComment(c *fiber.Ctx) error {
+	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
+	req := new(resource.GetAllCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
+	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
+	res, err := h.service.GetAllComment()
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
@@ -49,7 +49,7 @@ func (h *commentHandler) GetComments(c *fiber.Ctx) error {
 func (h *commentHandler) CreateComment(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
 	req := new(resource.CreateCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
-	ctx.C.QueryParser(req)                    // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
+	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
 	err := h.service.CreateComment(req)
 
 	if err != nil {
@@ -61,7 +61,7 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) error {
 func (h *commentHandler) UpdateComment(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
 	req := new(resource.UpdateCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
-	ctx.C.QueryParser(req)                    // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
+	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
 	err := h.service.UpdateComment(req)
 
 	if err != nil {
@@ -73,7 +73,7 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) error {
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
 	req := new(resource.DeleteCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
-	ctx.C.QueryParser(req)                    // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
+	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
 	res, err := h.service.DeleteComment(req)
 
 	if err != nil {

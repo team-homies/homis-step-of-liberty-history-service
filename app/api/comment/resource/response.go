@@ -1,7 +1,7 @@
 package resource
 
 // comment 반환값
-type GetCommentsResponse struct {
+type GetAllCommentResponse struct {
 	Comment []CommentResource `json:"comments"`
 }
 

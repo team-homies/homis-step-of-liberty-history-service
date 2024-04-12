@@ -1,7 +1,7 @@
 package resource
 
 // comment 요청값
-type GetCommentsRequest struct {
+type GetAllCommentRequest struct {
 	Id uint64 `json:"id" query:"id"`
 }
 

@@ -12,8 +12,8 @@ func SetCommentApis(route fiber.Router) {
 	// /history
 	h := handler.NewCommentHandler()
 
-	// 혈서 목록s
-	route.Get(constant.GetCommentPath().Comment.GetComments, h.GetComments)
+	// 혈서 list 목록
+	route.Get(constant.GetCommentPath().Comment.GetComments, h.GetAllComment)
 	// 혈서 등록
 	route.Post(constant.GetCommentPath().Comment.CreateComment, h.CreateComment)
 	// 혈서 수정
