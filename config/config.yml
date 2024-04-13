@@ -1,18 +1,13 @@
-#config
+#샘플 config
 app:
-  name: 'history'
+  name: 'boilerplate'
   version: '0.0.1'
   port: :8157
   grpc_port: :8158
-
-#history database
+#주석주석
 database:
-  host: '158.180.71.117'
+  host: 'localhost'
   port: 5432
-  database: 'history'
-  rw:
-    user: 'history_rw'
-    password: '5t!WQOQnYn22!U7'
-  ro:
-    user: 'history_ro'
-    password: 'R+s_jGL+coLeYB='
+  user: 'user'
+  password: 'pw'
+  database: 'test'
