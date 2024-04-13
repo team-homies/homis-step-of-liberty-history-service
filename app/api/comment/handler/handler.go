@@ -62,7 +62,7 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
 	req := new(resource.UpdateCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
 	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	err := h.service.UpdateComment(req)
+	err := h.service.UpdateComment(id)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
@@ -74,7 +74,7 @@ func (h *commentHandler) DeleteComment(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
 	req := new(resource.DeleteCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
 	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	res, err := h.service.DeleteComment(req)
+	res, err := h.service.DeleteComment(id)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
