@@ -47,7 +47,7 @@ func (g *gormCommentRepository) Create(req *entity.Comment) (err error) {
 func (g *gormCommentRepository) Update(req *entity.Comment) (err error) {
 	// panic("")
 	tx := g.db.Begin()
-	// tx.Model(&entity.Comment{}).Where 추후작성
+	tx.Model(&entity.Comment{}).Where("id = ?", req.ID).Updates(req)
 
 	if tx.Error != nil {
 		tx.Rollback()
