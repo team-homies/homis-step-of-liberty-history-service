@@ -16,8 +16,7 @@ func GetCommentPath() *core.InternalApi {
 	once.Do(func() {
 		instance = &core.InternalApi{
 			Comment: core.CommentPath{
-				GetComment:    "/:id/comments",
-				GetComments:   "/:id/comments/list",
+				GetAllComment: "/:id/comments",
 				CreateComment: "/:id/comments",
 				UpdateComment: "/:id/comments",
 				DeleteComment: "/:id/comments",
@@ -33,11 +32,8 @@ func GetDexPath() *core.InternalApi {
 	once.Do(func() {
 		instance = &core.InternalApi{
 			Dex: core.DexPath{
-				GetDex:    "/dex",
-				GetDexs:   "/dex/list",
-				CreateDex: "/dex",
-				UpdateDex: "/dex",
-				DeleteDex: "/dex",
+				GetDex:    "/", // gRPC?
+				CreateDex: "/",
 			},
 		}
 	})

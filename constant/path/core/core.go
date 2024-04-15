@@ -7,8 +7,7 @@ type InternalApi struct {
 }
 
 type CommentPath struct {
-	GetComment    string
-	GetComments   string
+	GetAllComment string
 	CreateComment string
 	UpdateComment string
 	DeleteComment string
@@ -16,8 +15,5 @@ type CommentPath struct {
 
 type DexPath struct {
 	GetDex    string
-	GetDexs   string
 	CreateDex string
-	UpdateDex string
-	DeleteDex string
 }

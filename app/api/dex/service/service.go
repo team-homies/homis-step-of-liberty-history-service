@@ -4,11 +4,8 @@ import "main/app/api/dex/resource"
 
 // 서비스 인터페이스
 type DexService interface {
-	GetDex(req *resource.GetDexRequest) (res *resource.GetDexResponse, err error)
-	GetDexs() (resource.GetDexsResponse, error)
-	CreateDex(req *resource.CreateDexRequest) error
-	UpdateDex(req *resource.UpdateDexRequest) (res *resource.UpdateDexResponse, err error)
-	DeleteDex(id int) error
+	GetDex(req *resource.GetDexEventRequest) (res *resource.GetDexResponse, err error)
+	CreateDex(req *resource.CreateDexEventRequest) error
 }
 
 // comment 서비스 함수
@@ -23,10 +20,10 @@ type dexService struct {
 	DexService
 }
 
-func (s *dexService) GetComment(req *resource.GetDexRequest) (res *resource.GetDexResponse, err error) {
+func (s *dexService) GetComment(req *resource.GetDexEventRequest) (res *resource.GetDexResponse, err error) {
 	res = new(resource.GetDexResponse)
 	res = &resource.GetDexResponse{
-		Dex: resource.DexResource{
+		Dex: resource.DexEventResource{
 			Id:       1,
 			UserId:   1,
 			UserName: "논현동",
