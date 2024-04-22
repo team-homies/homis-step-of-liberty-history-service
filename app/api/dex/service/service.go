@@ -4,8 +4,8 @@ import "main/app/api/dex/resource"
 
 // 서비스 인터페이스
 type DexService interface {
-	GetDex(req *resource.GetDexEventRequest) (res *resource.GetDexResponse, err error)
-	CreateDex(req *resource.CreateDexEventRequest) error
+	GetDex() (res *resource.GetDexResponse, err error)
+	CreateDex(id uint, req *resource.CreateDexEventRequest) (err error)
 }
 
 // comment 서비스 함수
@@ -32,4 +32,18 @@ func (s *dexService) GetComment(req *resource.GetDexEventRequest) (res *resource
 	}
 
 	return
+}
+func (s *dexService) CreateComment(id uint, req *resource.CreateDexEventRequest) (err error) {
+	for _, newComment := range req {
+		comment := resource.CreateDexEventRequest{
+			Id:      newComment.Id,
+			Content: newComment.Content,
+		}
+		err = comment.CommentRepository.Create(req)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

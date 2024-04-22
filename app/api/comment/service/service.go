@@ -80,7 +80,7 @@ func (s *commentService) CreateComment(id uint, req *resource.CreateCommentReque
 			Id:      newComment.Id,
 			Content: newComment.Content,
 		}
-		err = comment.CommentRepository.Create(req)
+		err = comment.comment.Create(req)
 		if err != nil {
 			return err
 		}
@@ -94,7 +94,7 @@ func (s *commentService) UpdateComment(id uint, req *resource.UpdateCommentReque
 	if req.Content != "" {
 		comment.Content = req.Content
 	}
-	err = comment.CommentRepository.Update(comment)
+	err = comment.comment.Update(comment)
 	if err != nil {
 		return nil
 	}
@@ -111,7 +111,7 @@ func (s *commentService) DeleteComment(id uint) (res *resource.DeleteCommentResp
 	// 		Content:  "time to go to bed",
 	// 	},
 	// }
-	res, err = comment.CommentRepository.Delete(id)
+	res, err = comment.comment.Delete(id)
 	if err != nil {
 		return nil, err
 	}
