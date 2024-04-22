@@ -20,7 +20,7 @@ type dexService struct {
 	DexService
 }
 
-func (s *dexService) GetComment(req *resource.GetDexEventRequest) (res *resource.GetDexResponse, err error) {
+func (s *dexService) GetDex() (res *resource.GetDexResponse, err error) {
 	res = new(resource.GetDexResponse)
 	res = &resource.GetDexResponse{
 		Dex: resource.DexEventResource{
@@ -33,13 +33,13 @@ func (s *dexService) GetComment(req *resource.GetDexEventRequest) (res *resource
 
 	return
 }
-func (s *dexService) CreateComment(id uint, req *resource.CreateDexEventRequest) (err error) {
-	for _, newComment := range req {
-		comment := resource.CreateDexEventRequest{
-			Id:      newComment.Id,
-			Content: newComment.Content,
+func (s *dexService) CreateDex(id uint, req *resource.CreateDexEventRequest) (err error) {
+	for _, newDex := range req {
+		dex := resource.CreateDexEventRequest{
+			Id:      newDex.Id,
+			Content: newDex.Content,
 		}
-		err = comment.CommentRepository.Create(req)
+		err = dex.DexRepository.Create(req)
 		if err != nil {
 			return err
 		}

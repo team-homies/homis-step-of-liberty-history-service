@@ -94,7 +94,7 @@ func (s *commentService) UpdateComment(id uint, req *resource.UpdateCommentReque
 	if req.Content != "" {
 		comment.Content = req.Content
 	}
-	err = comment.comment.Update(comment)
+	err = comment.CommentRepository.Update(comment)
 	if err != nil {
 		return nil
 	}
@@ -111,7 +111,7 @@ func (s *commentService) DeleteComment(id uint) (res *resource.DeleteCommentResp
 	// 		Content:  "time to go to bed",
 	// 	},
 	// }
-	res, err = comment.comment.Delete(id)
+	res, err = comment.CommentRepository.Delete(id)
 	if err != nil {
 		return nil, err
 	}
