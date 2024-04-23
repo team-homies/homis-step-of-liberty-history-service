@@ -35,7 +35,7 @@ func (Detail) TableName() string {
 
 type UserDex struct {
 	gorm.Model
-	EventId int `gorm:"column:dex_id; foreignKey:EventId;"`
+	EventId int `gorm:"column:dex_id;foreignKey:EventId;"`
 	UserId  int `gorm:"column:user_id;not null"`
 }
 
