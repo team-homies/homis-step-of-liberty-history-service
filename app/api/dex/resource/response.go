@@ -1,10 +1,10 @@
 package resource
 
 // dex 반환값
-type GetDexResponse struct {
+type GetDexEventResponse struct {
 	Dex DexEventResource `json:"dex"`
 }
 
-type CreateDexResponse struct {
+type CreateDexEventResponse struct {
 	Dex DexEventResource `json:"dex"`
 }

@@ -3,26 +3,26 @@ package service
 import "main/app/api/dex/resource"
 
 // 서비스 인터페이스
-type DexService interface {
-	GetDex() (res *resource.GetDexResponse, err error)
-	CreateDex(id uint, req *resource.CreateDexEventRequest) (err error)
+type DexEventService interface {
+	GetDexEvent() (res *resource.GetDexEventResponse, err error)
+	CreateDexEvent(id uint, req *resource.CreateDexEventRequest) (err error)
 }
 
 // comment 서비스 함수
-func NewDexService() DexService {
-	return &dexService{
+func NewDexEventService() DexEventService {
+	return &dexEventService{
 		// 위의 서비스 인터페이스 Comment서비스
-		DexService: &dexService{},
+		DexEventService: &dexEventService{},
 	}
 }
 
-type dexService struct {
-	DexService
+type dexEventService struct {
+	DexEventService
 }
 
-func (s *dexService) GetDex() (res *resource.GetDexResponse, err error) {
-	res = new(resource.GetDexResponse)
-	res = &resource.GetDexResponse{
+func (s *dexEventService) GetDexEvent() (res *resource.GetDexEventResponse, err error) {
+	res = new(resource.GetDexEventResponse)
+	res = &resource.GetDexEventResponse{
 		Dex: resource.DexEventResource{
 			Id:       1,
 			UserId:   1,
@@ -33,13 +33,13 @@ func (s *dexService) GetDex() (res *resource.GetDexResponse, err error) {
 
 	return
 }
-func (s *dexService) CreateDex(id uint, req *resource.CreateDexEventRequest) (err error) {
+func (s *dexEventService) CreateDexEvent(id uint, req *resource.CreateDexEventRequest) (err error) {
 	for _, newDex := range req {
 		dex := resource.CreateDexEventRequest{
 			Id:      newDex.Id,
 			Content: newDex.Content,
 		}
-		err = dex.DexRepository.Create(req)
+		err = dex.DexEventRepository.Create(req)
 		if err != nil {
 			return err
 		}

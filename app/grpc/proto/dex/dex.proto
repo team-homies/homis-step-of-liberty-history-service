@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package grpc;
+option go_package= "main/app/grpc/proto/dex";
+
+service DexEventService {
+    rpc GetDexEvent (DexEventRequest) returns (DexEventResponse) {}
+  }
+  
+  message DexEventRequest {
+      int    Id = 1;
+  }
+  
+  message DexEventResponse {
+      int    EventId = 1;
+      string Name = 2;
+      string Level = 3;
+      string Created = 4;
+      string Updated = 5;
+      bool   IsUsed = 6;
+      Detail EventDetail = 7;
+  }
+  
+  message Detail {
+      string DetailId = 1;
+      string Define = 2;
+      string Outline = 3;
+      string Place = 4;
+      string Background = 5;
+      string ImageUrl = 6;
+  }
+  

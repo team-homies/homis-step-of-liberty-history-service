@@ -27,13 +27,13 @@ func GetCommentPath() *core.InternalApi {
 	return instance
 }
 
-func GetDexPath() *core.InternalApi {
+func GetDexEventPath() *core.InternalApi {
 	// Do함수는 인스턴스가 있으면 실행X
 	once.Do(func() {
 		instance = &core.InternalApi{
-			Dex: core.DexPath{
-				GetDex:    "/", // gRPC?
-				CreateDex: "/",
+			DexEvent: core.DexEventPath{
+				GetDexEvent:    "/", // gRPC?
+				CreateDexEvent: "/",
 			},
 		}
 	})

@@ -10,31 +10,31 @@ import (
 
 // handler 인터페이스
 type handler interface {
-	GetDex(c *fiber.Ctx) error
-	CreateDex(c *fiber.Ctx) error
+	GetDexEvent(c *fiber.Ctx) error
+	CreateDexEvent(c *fiber.Ctx) error
 }
 
 // 핸들러 자료형?
-type dexHandler struct {
+type dexEventHandler struct {
 	// 필요한 리소스 선언
-	service service.DexService
+	service service.DexEventService
 }
 
-func NewDexHandler() handler {
-	return &dexHandler{
+func NewDexEventHandler() handler {
+	return &dexEventHandler{
 		// dex 서비스 생성
-		service: service.NewDexService(),
+		service: service.NewDexEventService(),
 	}
 }
 
 // comment.go에서 라우터에 들어가는 함수
 // (h *commentHandler) 리시버함수를 만드는 방법
 // GetComment 리시버함수
-func (h *dexHandler) GetDex(c *fiber.Ctx) error {
+func (h *dexEventHandler) GetDexEvent(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}          // 파이버객체 생성
 	req := new(resource.GetDexEventRequest) // 사용자에게서 받은 요청값을 req에 받는다
 	ctx.C.QueryParser(req)                  // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	res, err := h.service.GetDex(req)
+	res, err := h.service.GetDexEvent(req)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
@@ -42,11 +42,11 @@ func (h *dexHandler) GetDex(c *fiber.Ctx) error {
 	return ctx.HttpOK(res) // 파이버키트에서 성공메세지 가져옴
 }
 
-func (h *dexHandler) CreateDex(c *fiber.Ctx) error {
+func (h *dexEventHandler) CreateDexEvent(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}             // 파이버객체 생성
 	req := new(resource.CreateDexEventRequest) // 사용자에게서 받은 요청값을 req에 받는다
 	ctx.C.ParamsParser(req)                    // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	err := h.service.CreateDex(req)
+	err := h.service.CreateDexEvent(req)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
