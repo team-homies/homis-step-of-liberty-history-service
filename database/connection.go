@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"main/config"
+	"main/database/entity"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
@@ -19,7 +20,8 @@ type DBConfig struct {
 
 func InitDB() (*gorm.DB, error) { // postgres 연동
 	dns := generateDialector()
-	db, err := gorm.Open(postgres.Open(dns.RwDSN), &gorm.Config{}) // err값이 null이면 RW 연동 성공
+	db, err := gorm.Open(postgres.Open(dns.RwDSN), &gorm.Config{})
+	db.AutoMigrate(&entity.Event{}, &entity.Detail{}, &entity.UserDex{}, &entity.Tag{}, &entity.Mapping{}, &entity.Comment{}, &entity.Quote{})
 	if err != nil {
 		return nil, err
 	}
@@ -40,19 +42,19 @@ func InitDB() (*gorm.DB, error) { // postgres 연동
 func generateDialector() DBConfig {
 	cfg := DBConfig{
 		// viper에서 dns 읽어오기
-		RwDSN: fmt.Sprintf("host=%s:%d user=%s dbname=%s sslmode=disable password=%s",
-			viper.GetString(config.DATABASE_HOST),
-			viper.GetInt(config.DATABASE_PORT),
+		RwDSN: fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
 			viper.GetString(config.DATABASE_RW_USER),
-			viper.GetString(config.DATABASE_DATABASE),
 			viper.GetString(config.DATABASE_RW_PASSWORD),
-		),
-		RoDSN: fmt.Sprintf("host=%s:%d user=%s dbname=%s sslmode=disable password=%s",
 			viper.GetString(config.DATABASE_HOST),
 			viper.GetInt(config.DATABASE_PORT),
-			viper.GetString(config.DATABASE_RO_USER),
 			viper.GetString(config.DATABASE_DATABASE),
+		),
+		RoDSN: fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
+			viper.GetString(config.DATABASE_RO_USER),
 			viper.GetString(config.DATABASE_RO_PASSWORD),
+			viper.GetString(config.DATABASE_HOST),
+			viper.GetInt(config.DATABASE_PORT),
+			viper.GetString(config.DATABASE_DATABASE),
 		),
 	}
 

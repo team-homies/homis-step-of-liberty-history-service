@@ -1,11 +1,10 @@
 package config
 
 const (
-	APP_PORT      = "app.port"
-	APP_NAME      = "app.name"
-	APP_VERSION   = "app.version"
-	APP_GRPC_PORT = "app.grpc_port"
-
+	APP_PORT             = "app.port"
+	APP_NAME             = "app.name"
+	APP_VERSION          = "app.version"
+	APP_GRPC_PORT        = "app.grpc_port"
 	DATABASE_HOST        = "database.host"
 	DATABASE_PORT        = "database.port"
 	DATABASE_DATABASE    = "database.database"
