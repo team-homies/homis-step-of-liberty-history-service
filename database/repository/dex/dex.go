@@ -7,20 +7,20 @@ import (
 )
 
 // Dex 레포지토리 인터페이스
-type DexRepository interface {
-	Get() (res []entity.Dex, err error)
-	Create(req *entity.Dex) (err error)
+type DexEventRepository interface {
+	Get() (res []entity.Event, err error)
+	Create(req *entity.Event) (err error)
 }
 
-type gormDexRepository struct {
+type gormDexEventRepository struct {
 	db *gorm.DB
 }
 
-func NewDexRepository(db *gorm.DB) DexRepository {
-	return &gormDexRepository{db}
+func NewDexEventRepository(db *gorm.DB) DexEventRepository {
+	return &gormDexEventRepository{db}
 }
 
-func (g *gormDexRepository) Get() (res []entity.Dex, err error) {
+func (g *gormDexEventRepository) Get() (res []entity.Event, err error) {
 	// panic("error!!")
 	tx := g.db
 	tx.Find(&res)
@@ -30,7 +30,7 @@ func (g *gormDexRepository) Get() (res []entity.Dex, err error) {
 	return res, nil
 }
 
-func (g *gormDexRepository) Create(req *entity.Dex) (err error) {
+func (g *gormDexEventRepository) Create(req *entity.Event) (err error) {
 	// panic("")
 	tx := g.db.Begin()
 	tx.Create(&req)

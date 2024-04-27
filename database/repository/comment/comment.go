@@ -11,7 +11,7 @@ type CommentRepository interface {
 	GetAll() (res []entity.Comment, err error)
 	Create(req *entity.Comment) (err error)
 	Update(req *entity.Comment) (err error)
-	Delete(id uint) (res *entity.Comment, err error)
+	Delete(id int) (res *entity.Comment, err error)
 }
 
 type gormCommentRepository struct {
@@ -58,7 +58,7 @@ func (g *gormCommentRepository) Update(req *entity.Comment) (err error) {
 	return err
 }
 
-func (g *gormCommentRepository) Delete(id uint) (res *entity.Comment, err error) {
+func (g *gormCommentRepository) Delete(id int) (res *entity.Comment, err error) {
 	// panic("")
 	tx := g.db.Begin()
 	tx.Where("id = ?", id).Find(&res)

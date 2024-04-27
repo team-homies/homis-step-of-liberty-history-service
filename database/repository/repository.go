@@ -2,20 +2,19 @@ package repository
 
 import (
 	"main/database"
-	"main/database/repository/comment"
 )
 
 type Repository interface {
-	comment.CommentRepository
+	dex.DexRepository
 }
 
 func NewRepository() Repository {
 	db := database.DB
 	return &repository{
-		comment.NewCommentRepository(db),
+		dex.NewDexRepository(db),
 	}
 }
 
 type repository struct {
-	comment.CommentRepository
+	dex.DexRepository
 }

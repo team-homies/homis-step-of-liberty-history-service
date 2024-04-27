@@ -1,6 +1,9 @@
 package service
 
-import "main/app/api/dex/resource"
+import (
+	"main/app/api/dex/resource"
+	"main/database/repository/dex"
+)
 
 // 서비스 인터페이스
 type DexEventService interface {
@@ -35,11 +38,11 @@ func (s *dexEventService) GetDexEvent() (res *resource.GetDexEventResponse, err 
 }
 func (s *dexEventService) CreateDexEvent(id uint, req *resource.CreateDexEventRequest) (err error) {
 	for _, newDex := range req {
-		dex := resource.CreateDexEventRequest{
+		dexEvent := resource.CreateDexEventRequest{
 			Id:      newDex.Id,
 			Content: newDex.Content,
 		}
-		err = dex.DexEventRepository.Create(req)
+		err = dex.DexEventRepository.Create(dexEvent)
 		if err != nil {
 			return err
 		}

@@ -4,6 +4,7 @@ import (
 	"main/app/api/comment/resource"
 	"main/app/api/comment/service"
 	"main/common/fiberkit"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -47,10 +48,12 @@ func (h *commentHandler) GetAllComment(c *fiber.Ctx) error {
 }
 
 func (h *commentHandler) CreateComment(c *fiber.Ctx) error {
-	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
+	ctx := fiberkit.FiberKit{C: c} // 파이버객체 생성
+	id := c.Params("id")
+	num, _ := strconv.Atoi(id)                // 문자열id를 10진수 int로 변환
 	req := new(resource.CreateCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
 	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	err := h.service.CreateComment(req)
+	err := h.service.CreateComment(num, req)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
@@ -59,10 +62,12 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) error {
 }
 
 func (h *commentHandler) UpdateComment(c *fiber.Ctx) error {
-	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
+	ctx := fiberkit.FiberKit{C: c} // 파이버객체 생성
+	id := c.Params("id")
+	num, _ := strconv.Atoi(id)                // 문자열id를 10진수 int로 변환
 	req := new(resource.UpdateCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
 	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	err := h.service.UpdateComment(id)
+	err := h.service.UpdateComment(num, req)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
@@ -73,8 +78,10 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) error {
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
 	req := new(resource.DeleteCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
-	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	res, err := h.service.DeleteComment(id)
+	id := c.Params("id")
+	num, _ := strconv.Atoi(id) // 문자열id를 10진수 int로 변환
+	ctx.C.ParamsParser(req)    // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
+	res, err := h.service.DeleteComment(num)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
