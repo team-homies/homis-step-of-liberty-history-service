@@ -11,7 +11,7 @@ import (
 // 서비스 인터페이스 선언 (메소드와 반환형 기재)
 type CommentService interface {
 	GetAllComment() (res *[]resource.GetAllCommentResponse, err error)
-	CreateComment(id int, req *resource.CreateCommentRequest) (err error)
+	CreateComment(id int, req []*resource.CreateCommentRequest) (err error)
 	UpdateComment(id int, req *resource.UpdateCommentRequest) (err error)
 	DeleteComment(id int) (res *resource.DeleteCommentResponse, err error)
 }
@@ -43,10 +43,9 @@ func (s *commentService) GetAllComment() (res *[]resource.GetAllCommentResponse,
 		commentRes = append(commentRes, resource.GetAllCommentResponse{
 			Comment: []resource.CommentResource{
 				{
-					Id:       comment.Id,
-					UserId:   comment.UserId,
-					UserName: comment.UserName,
-					Content:  comment.Content,
+					Id:      int(comment.ID),
+					UserId:  comment.UserId,
+					Content: comment.Content,
 				},
 			},
 		})
