@@ -42,9 +42,6 @@ func (d *dexEventService) FindDexEvent(id int64) (res *resource.DexEventResponse
 	res.EventDetail.Place = dexDetail.Place
 	res.EventDetail.Background = dexDetail.Background
 	res.EventDetail.ImageUrl = dexDetail.ImageUrl
-	if err != nil {
-		return nil, err
-	}
 
 	// 3. 리턴한다
 	return res, nil
