@@ -1,4 +1,4 @@
-package comment
+package dex
 
 import (
 	"main/database/entity"
@@ -8,8 +8,9 @@ import (
 
 // Dex 레포지토리 인터페이스
 type DexRepository interface {
-	Get() (res []entity.Dex, err error)
-	Create(req *entity.Dex) (err error)
+	FindDexEventById(id int64) (res []entity.Event, err error)
+	FindDexDetailById(id int64) (res []entity.Detail, err error)
+	Create(req *entity.Event) (err error)
 }
 
 type gormDexRepository struct {
@@ -20,17 +21,35 @@ func NewDexRepository(db *gorm.DB) DexRepository {
 	return &gormDexRepository{db}
 }
 
-func (g *gormDexRepository) Get() (res []entity.Dex, err error) {
+func (g *gormDexRepository) FindDexEventById(id int64) (res []entity.Event, err error) {
 	// panic("error!!")
+	// select  e.name, e.level, d.define, d.outline, d.place, d.background, d.image_url
+	//   from "event" e, "detail" d
+	//  where e.id = d.dex_id;
 	tx := g.db
-	tx.Find(&res)
+	tx.Model(&entity.Event{}).Select("name", "level").Where("id = ?", id).Find(&res)
+
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
 	return res, nil
 }
 
-func (g *gormDexRepository) Create(req *entity.Dex) (err error) {
+func (g *gormDexRepository) FindDexDetailById(id int64) (res []entity.Detail, err error) {
+	// panic("error!!")
+	// select  e.name, e.level, d.define, d.outline, d.place, d.background, d.image_url
+	//   from "event" e, "detail" d
+	//  where e.id = d.dex_id;
+	tx := g.db
+	tx.Model(&entity.Detail{}).Select("define", "outline", "place", "background", "image_url").Where("dex_id = ?", id).Find(&res)
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return res, nil
+}
+
+func (g *gormDexRepository) Create(req *entity.Event) (err error) {
 	// panic("")
 	tx := g.db.Begin()
 	tx.Create(&req)

@@ -12,21 +12,19 @@ service DexEventService {
   }
   
   message DexEventResponse {
-      int64  EventId = 1;
-      string Name = 2;
-      string Level = 3;
-      string Created = 4;
-      string Updated = 5;
-      bool   IsUsed = 6;
-      Detail EventDetail = 7;
+      string Name = 1;
+      string Level = 2;
+      string Created = 3;
+      string Updated = 4;
+      bool   IsUsed = 5;
+      Detail EventDetail = 6;
   }
   
   message Detail {
-      string DetailId = 1;
-      string Define = 2;
-      string Outline = 3;
-      string Place = 4;
-      string Background = 5;
-      string ImageUrl = 6;
+      string Define = 1;
+      string Outline = 2;
+      string Place = 3;
+      string Background = 4;
+      string ImageUrl = 5;
   }
   
