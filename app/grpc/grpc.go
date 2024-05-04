@@ -8,8 +8,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-// gRPC함수를 가져다 쓴다는게
-// grpc.go에서 pb.go의 함수를 가져와 쓴다는 말
 type GrpcService interface {
 	FindDexEvent(ctx context.Context, in *dex.DexEventRequest) (*dex.DexEventResponse, error)
 }

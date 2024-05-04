@@ -1,10 +1,9 @@
 package service
 
-import "main/app/api/dex/resource"
+import "main/database/repository"
 
 type DexEventService interface {
-	GetDexEvent() (res *resource.GetDexEventResponse, err error)
-	CreateDexEvent(id uint, req *resource.CreateDexEventRequest) (err error)
+	CreateUserDex(dexId int64, userId int64) (err error)
 }
 
 func NewDexEventService() DexEventService {
@@ -17,31 +16,20 @@ type dexEventService struct {
 	DexEventService
 }
 
-func (s *dexEventService) GetDexEvent() (res *resource.GetDexEventResponse, err error) {
-	res = new(resource.GetDexEventResponse)
-	res = &resource.GetDexEventResponse{
-		Dex: resource.DexEventResource{
-			Id:       1,
-			UserId:   1,
-			UserName: "논현동",
-			Content:  "time to go to bed",
-		},
-	}
+func (s *dexEventService) CreateUserDex(dexId int64, userId int64) (err error) {
+	dexReposiroty := repository.NewRepository()
+	// 1. userId와 dexId가 일치하는 값 참거짓 구분
+	countDex, err := dexReposiroty.FindUserDexById(dexId, userId)
+	// 2. 만약 값이 0이 아니면 에러 반환
+	if countDex != 0 {
+		return err
+		// 3. 만약 값이 0이면 Create 반환
+	} else {
+		err := dexReposiroty.CreateUserDexById(dexId, userId)
+		if err != nil {
+			return err
+		}
 
+	}
 	return
 }
-
-// func (s *dexEventService) CreateDexEvent(id uint, req *resource.CreateDexEventRequest) (err error) {
-// 	for _, newDex := range req {
-// 		dex := resource.CreateDexEventRequest{
-// 			Id:      newDex.Id,
-// 			Content: newDex.Content,
-// 		}
-// 		err = dex.DexEventRepository.Create(req)
-// 		if err != nil {
-// 			return err
-// 		}
-// 	}
-
-// 	return nil
-// }

@@ -2,11 +2,14 @@ package handler
 
 import (
 	"main/app/api/dex/service"
+	"main/common/fiberkit"
+	"strconv"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type handler interface {
-	// GetDexEvent(c *fiber.Ctx) error
-	// CreateDexEvent(c *fiber.Ctx) error
+	CreateDexEvent(c *fiber.Ctx) error
 }
 
 type dexEventHandler struct {
@@ -18,15 +21,20 @@ func NewDexEventHandler() handler {
 		service: service.NewDexEventService(),
 	}
 }
+func (h *dexEventHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
+	ctx := fiberkit.FiberKit{C: c}
+	// 1. id값 받아오기
+	userId := c.Params("id")
+	dexId := c.Params("id")
+	userNum, _ := strconv.Atoi(userId)
+	dexNum, _ := strconv.Atoi(dexId)
+	ctx.C.ParamsParser(userId)
+	ctx.C.ParamsParser(dexId)
+	// 2. 서비스 함수 실행
+	err = h.service.CreateUserDex(int64(userNum), int64(dexNum))
 
-// func (h *dexEventHandler) CreateDexEvent(c *fiber.Ctx) error {
-// 	ctx := fiberkit.FiberKit{C: c}
-// 	req := new(resource.CreateDexEventRequest)
-// 	ctx.C.ParamsParser(req)
-// 	err := h.service.CreateDexEvent(req)
-
-// 	if err != nil {
-// 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
-// 	}
-// 	return ctx.HttpOK(err)
-// }
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
+	return ctx.HttpOK(err)
+}
