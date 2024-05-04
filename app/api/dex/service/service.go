@@ -30,17 +30,18 @@ func (s *dexEventService) GetDexEvent() (res *resource.GetDexEventResponse, err 
 
 	return
 }
-func (s *dexEventService) CreateDexEvent(id uint, req *resource.CreateDexEventRequest) (err error) {
-	for _, newDex := range req {
-		dex := resource.CreateDexEventRequest{
-			Id:      newDex.Id,
-			Content: newDex.Content,
-		}
-		err = dex.DexEventRepository.Create(req)
-		if err != nil {
-			return err
-		}
-	}
 
-	return nil
-}
+// func (s *dexEventService) CreateDexEvent(id uint, req *resource.CreateDexEventRequest) (err error) {
+// 	for _, newDex := range req {
+// 		dex := resource.CreateDexEventRequest{
+// 			Id:      newDex.Id,
+// 			Content: newDex.Content,
+// 		}
+// 		err = dex.DexEventRepository.Create(req)
+// 		if err != nil {
+// 			return err
+// 		}
+// 	}
+
+// 	return nil
+// }
