@@ -8,11 +8,11 @@ service DexEventService {
   }
   
   message DexEventRequest {
-      int    Id = 1;
+      int64  Id = 1;
   }
   
   message DexEventResponse {
-      int    EventId = 1;
+      int64  EventId = 1;
       string Name = 2;
       string Level = 3;
       string Created = 4;
