@@ -8,7 +8,7 @@ import (
 
 // Comment 레포지토리 인터페이스
 type CommentRepository interface {
-	GetAll() (res []entity.Comment, err error)
+	FindAll() (res []entity.Comment, err error)
 	Create(req *entity.Comment) (err error)
 	Update(req *entity.Comment) (err error)
 	Delete(id int) (res *entity.Comment, err error)
@@ -22,8 +22,11 @@ func NewCommentRepository(db *gorm.DB) CommentRepository {
 	return &gormCommentRepository{db}
 }
 
-func (g *gormCommentRepository) GetAll() (res []entity.Comment, err error) {
-	// panic("error!!")
+func (g *gormCommentRepository) FindAll() (res []entity.Comment, err error) {
+	// 1. 쿼리 작성
+	// select (id, dex_id, user_id, content) from comment
+
+	// 2. gorm 적용
 	tx := g.db
 	tx.Find(&res)
 	if tx.Error != nil {

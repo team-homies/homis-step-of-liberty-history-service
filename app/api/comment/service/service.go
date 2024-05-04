@@ -3,6 +3,7 @@ package service
 import (
 	"main/app/api/comment/resource"
 	"main/database/entity"
+	"main/database/repository"
 	"main/database/repository/comment"
 
 	"gorm.io/gorm"
@@ -10,7 +11,7 @@ import (
 
 // 서비스 인터페이스 선언 (메소드와 반환형 기재)
 type CommentService interface {
-	GetAllComment() (res *[]resource.GetAllCommentResponse, err error)
+	FindAllComment() (res []resource.GetAllCommentResponse, err error)
 	CreateComment(id int, req []*resource.CreateCommentRequest) (err error)
 	UpdateComment(id int, req *resource.UpdateCommentRequest) (err error)
 	DeleteComment(id int) (res *resource.DeleteCommentResponse, err error)
@@ -31,30 +32,28 @@ type commentService struct {
 	db *gorm.DB
 }
 
-func (s *commentService) GetAllComment() (res *[]resource.GetAllCommentResponse, err error) {
-	//raw 데이터 가져오기
-	comments, err := comment.NewCommentRepository(s.db).GetAll()
+func (s *commentService) FindAllComment() (res []resource.GetAllCommentResponse, err error) {
+	commentRepository := repository.NewRepository()
+	res = []resource.GetAllCommentResponse{}
+
+	// 1. 만들어진 레포지토리를 사용해서 데이터를 가져온다
+	commentFind, err := commentRepository.FindAll()
 	if err != nil {
 		return nil, err
 	}
-	var commentRes []resource.GetAllCommentResponse
-
-	for _, comment := range comments {
-		commentRes = append(commentRes, resource.GetAllCommentResponse{
-			Comment: []resource.CommentResource{
-				{
-					Id:      int(comment.ID),
-					UserId:  comment.UserId,
-					Content: comment.Content,
-				},
-			},
+	// 2. 리턴한다
+	for _, commentAll := range commentFind {
+		res = append(res, resource.GetAllCommentResponse{
+			ID:      int(commentAll.ID),
+			Content: commentAll.Content,
 		})
-
 	}
 
 	return res, nil
 }
 func (s *commentService) CreateComment(id int, req []*resource.CreateCommentRequest) (err error) {
+	commentRepository := repository.NewRepository()
+
 	for _, newComment := range req {
 		commentRes := resource.CreateCommentRequest{
 			Id:      newComment.Id,
@@ -82,15 +81,6 @@ func (s *commentService) UpdateComment(id int, req *resource.UpdateCommentReques
 	return err
 }
 func (s *commentService) DeleteComment(id int) (res *resource.DeleteCommentResponse, err error) {
-	// res = new(resource.DeleteCommentResponse)
-	// res = &resource.DeleteCommentResponse{
-	// 	Comment: resource.CommentResource{
-	// 		Id:       1,
-	// 		UserId:   1,
-	// 		UserName: "논현동",
-	// 		Content:  "time to go to bed",
-	// 	},
-	// }
 	res, err = comment.NewCommentRepository(s.db).Delete()
 	if err != nil {
 		return nil, err
