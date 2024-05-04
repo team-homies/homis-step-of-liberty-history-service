@@ -11,17 +11,11 @@ import (
 // gRPC함수를 가져다 쓴다는게
 // grpc.go에서 pb.go의 함수를 가져와 쓴다는 말
 type GrpcService interface {
-	FindDexEventById(ctx context.Context, in *dex.DexEventRequest) (*dex.DexEventResponse, error)
+	FindDexEvent(ctx context.Context, in *dex.DexEventRequest) (*dex.DexEventResponse, error)
 }
 
 type grpcServer struct {
 	dex dex.UnimplementedDexEventServiceServer
-}
-
-func NewGrpcServer() GrpcService {
-	return &grpcServer{
-		dex.UnimplementedDexEventServiceServer{},
-	}
 }
 
 func ListenGrpcServer() *grpc.Server {
@@ -32,7 +26,7 @@ func ListenGrpcServer() *grpc.Server {
 	return s
 }
 
-func (s *grpcServer) FindDexEventById(ctx context.Context, in *dex.DexEventRequest) (*dex.DexEventResponse, error) {
+func (s *grpcServer) FindDexEvent(ctx context.Context, in *dex.DexEventRequest) (*dex.DexEventResponse, error) {
 	// 1. id값 받아오기
 	id := in.GetId()
 	// 2. 서비스 함수 실행

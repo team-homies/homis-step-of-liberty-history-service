@@ -6,6 +6,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"google.golang.org/grpc"
+
+	grpcServ "main/app/grpc"
 )
 
 // fiber 인스턴스 생성
@@ -19,6 +21,7 @@ func InitFiber() *fiber.App {
 
 // go함수
 func InitGrpc() *grpc.Server {
-	grpcServer := grpc.NewServer()
+	// grpcServer := grpc.NewServer()
+	grpcServer := grpcServ.ListenGrpcServer()
 	return grpcServer
 }

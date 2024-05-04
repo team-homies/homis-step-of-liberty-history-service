@@ -46,7 +46,7 @@ func (c *dexEventServiceClient) FindDexEvent(ctx context.Context, in *DexEventRe
 // All implementations must embed UnimplementedDexEventServiceServer
 // for forward compatibility
 type DexEventServiceServer interface {
-	FindDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error)
+FindDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error)
 	mustEmbedUnimplementedDexEventServiceServer()
 }
 
