@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DexEventServiceClient interface {
-	GetDexEvent(ctx context.Context, in *DexEventRequest, opts ...grpc.CallOption) (*DexEventResponse, error)
+	FindDexEvent(ctx context.Context, in *DexEventRequest, opts ...grpc.CallOption) (*DexEventResponse, error)
 }
 
 type dexEventServiceClient struct {
@@ -33,9 +33,9 @@ func NewDexEventServiceClient(cc grpc.ClientConnInterface) DexEventServiceClient
 	return &dexEventServiceClient{cc}
 }
 
-func (c *dexEventServiceClient) GetDexEvent(ctx context.Context, in *DexEventRequest, opts ...grpc.CallOption) (*DexEventResponse, error) {
+func (c *dexEventServiceClient) FindDexEvent(ctx context.Context, in *DexEventRequest, opts ...grpc.CallOption) (*DexEventResponse, error) {
 	out := new(DexEventResponse)
-	err := c.cc.Invoke(ctx, "/grpc.DexEventService/GetDexEvent", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/grpc.DexEventService/FindDexEvent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *dexEventServiceClient) GetDexEvent(ctx context.Context, in *DexEventReq
 // All implementations must embed UnimplementedDexEventServiceServer
 // for forward compatibility
 type DexEventServiceServer interface {
-	GetDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error)
+	FindDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error)
 	mustEmbedUnimplementedDexEventServiceServer()
 }
 
@@ -54,8 +54,8 @@ type DexEventServiceServer interface {
 type UnimplementedDexEventServiceServer struct {
 }
 
-func (UnimplementedDexEventServiceServer) GetDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDexEvent not implemented")
+func (UnimplementedDexEventServiceServer) FindDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindDexEvent not implemented")
 }
 func (UnimplementedDexEventServiceServer) mustEmbedUnimplementedDexEventServiceServer() {}
 
@@ -70,20 +70,20 @@ func RegisterDexEventServiceServer(s grpc.ServiceRegistrar, srv DexEventServiceS
 	s.RegisterService(&DexEventService_ServiceDesc, srv)
 }
 
-func _DexEventService_GetDexEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DexEventService_FindDexEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DexEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DexEventServiceServer).GetDexEvent(ctx, in)
+		return srv.(DexEventServiceServer).FindDexEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc.DexEventService/GetDexEvent",
+		FullMethod: "/grpc.DexEventService/FindDexEvent",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DexEventServiceServer).GetDexEvent(ctx, req.(*DexEventRequest))
+		return srv.(DexEventServiceServer).FindDexEvent(ctx, req.(*DexEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,8 +96,8 @@ var DexEventService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DexEventServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetDexEvent",
-			Handler:    _DexEventService_GetDexEvent_Handler,
+			MethodName: "FindDexEvent",
+			Handler:    _DexEventService_FindDexEvent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

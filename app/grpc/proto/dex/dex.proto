@@ -4,7 +4,7 @@ package grpc;
 option go_package= "main/app/grpc/proto/dex";
 
 service DexEventService {
-    rpc GetDexEvent (DexEventRequest) returns (DexEventResponse) {}
+    rpc FindDexEvent (DexEventRequest) returns (DexEventResponse) {}
   }
   
   message DexEventRequest {
