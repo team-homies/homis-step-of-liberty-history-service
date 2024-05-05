@@ -11,7 +11,7 @@ import (
 
 // 핸들러 인터페이스 선언 (메소드와 반환형 기재)
 type handler interface {
-	GetAllComment(c *fiber.Ctx) error
+	FindAllComment(c *fiber.Ctx) error
 	CreateComment(c *fiber.Ctx) error
 	UpdateComment(c *fiber.Ctx) error
 	DeleteComment(c *fiber.Ctx) error
@@ -31,28 +31,25 @@ func NewCommentHandler() handler {
 	}
 }
 
-// comment.go에서 라우터에 들어가는 함수
-// (h *commentHandler) 리시버함수를 만드는 방법
-// GetAllComment 리시버함수
-
-func (h *commentHandler) GetAllComment(c *fiber.Ctx) error {
-	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
-	req := new(resource.GetAllCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
-	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
-	res, err := h.service.GetAllComment()
-
+// 혈서목록조회
+func (h *commentHandler) FindAllComment(c *fiber.Ctx) error {
+	ctx := fiberkit.FiberKit{C: c}
+	req := new(resource.GetAllCommentRequest)
+	ctx.C.ParamsParser(req)
+	res, err := h.service.FindAllComment()
 	if err != nil {
-		return ctx.HttpFail(err.Error(), fiber.StatusNotFound) // 파이버키트에서 실패메세지 가져옴
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
-	return ctx.HttpOK(res) // 파이버키트에서 성공메세지 가져옴
+	return ctx.HttpOK(res)
 }
 
+// 혈서등록
 func (h *commentHandler) CreateComment(c *fiber.Ctx) error {
-	ctx := fiberkit.FiberKit{C: c} // 파이버객체 생성
+	ctx := fiberkit.FiberKit{C: c}
 	id := c.Params("id")
-	num, _ := strconv.Atoi(id)                // 문자열id를 10진수 int로 변환
-	req := new(resource.CreateCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다
-	ctx.C.ParamsParser(req)                   // 쿼리 | 제이슨은 바디파서 | 패스는 파람파서
+	num, _ := strconv.Atoi(id)
+	req := new(resource.CreateCommentRequest)
+	ctx.C.ParamsParser(req)
 	err := h.service.CreateComment(num, req)
 
 	if err != nil {
@@ -61,6 +58,7 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) error {
 	return ctx.HttpOK(err) // 파이버키트에서 성공메세지 가져옴
 }
 
+// 혈서수정
 func (h *commentHandler) UpdateComment(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c} // 파이버객체 생성
 	id := c.Params("id")
@@ -75,6 +73,7 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) error {
 	return ctx.HttpOK(err) // 파이버키트에서 성공메세지 가져옴
 }
 
+// 혈서삭제
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}            // 파이버객체 생성
 	req := new(resource.DeleteCommentRequest) // 사용자에게서 받은 요청값을 req에 받는다

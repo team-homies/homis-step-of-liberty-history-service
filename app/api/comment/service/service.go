@@ -12,7 +12,7 @@ import (
 // 서비스 인터페이스 선언 (메소드와 반환형 기재)
 type CommentService interface {
 	FindAllComment() (res []resource.GetAllCommentResponse, err error)
-	CreateComment(id int, req []*resource.CreateCommentRequest) (err error)
+	CreateComment(id int, req *resource.CreateCommentRequest) (err error)
 	UpdateComment(id int, req *resource.UpdateCommentRequest) (err error)
 	DeleteComment(id int) (res *resource.DeleteCommentResponse, err error)
 }
@@ -51,19 +51,14 @@ func (s *commentService) FindAllComment() (res []resource.GetAllCommentResponse,
 
 	return res, nil
 }
-func (s *commentService) CreateComment(id int, req []*resource.CreateCommentRequest) (err error) {
+func (s *commentService) CreateComment(id int, req *resource.CreateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
-
-	for _, newComment := range req {
-		commentRes := resource.CreateCommentRequest{
-			Id:      newComment.Id,
-			Content: newComment.Content,
-		}
-		err = comment.NewCommentRepository(s.db).Create()
-		if err != nil {
-			return err
-		}
+	// 1. 만들어진 레포지토리를 사용해서 데이터를 입력한다
+	comment := entity.Comment{
+		Content: req.Content,
 	}
+	// 2. 리턴
+	commentRepository.Create(&comment)
 
 	return nil
 }

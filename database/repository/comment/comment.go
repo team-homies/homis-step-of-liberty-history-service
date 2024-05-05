@@ -36,7 +36,10 @@ func (g *gormCommentRepository) FindAll() (res []entity.Comment, err error) {
 }
 
 func (g *gormCommentRepository) Create(req *entity.Comment) (err error) {
-	// panic("")
+	// 1. 쿼리 작성
+	// insert into comment (id, dex_id, user_id, content) values (1, 1, 1, "내용")
+
+	// 2. gorm 적용
 	tx := g.db.Begin()
 	tx.Create(&req)
 	if tx.Error != nil {

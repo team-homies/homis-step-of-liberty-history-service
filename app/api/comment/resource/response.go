@@ -8,13 +8,19 @@ type GetAllCommentResponse struct {
 }
 
 type CreateCommentResponse struct {
-	Comment CommentResource `json:"comment"`
+	ID      int    `json:"id"`
+	UserId  int    `json:"user_id"`
+	Content string `json:"content"`
 }
 
 type UpdateCommentResponse struct {
-	Comment CommentResource `json:"comment"`
+	ID      int    `json:"id"`
+	UserId  int    `json:"user_id"`
+	Content string `json:"content"`
 }
 
 type DeleteCommentResponse struct {
-	Comment CommentResource `json:"comment"`
+	ID      int    `json:"id"`
+	UserId  int    `json:"user_id"`
+	Content string `json:"content"`
 }
