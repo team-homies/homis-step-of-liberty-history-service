@@ -4,7 +4,6 @@ import (
 	"main/app/api/comment/resource"
 	"main/database/entity"
 	"main/database/repository"
-	"main/database/repository/comment"
 
 	"gorm.io/gorm"
 )
@@ -32,6 +31,7 @@ type commentService struct {
 	db *gorm.DB
 }
 
+// 혈서목록조회 서비스
 func (s *commentService) FindAllComment() (res []resource.GetAllCommentResponse, err error) {
 	commentRepository := repository.NewRepository()
 	res = []resource.GetAllCommentResponse{}
@@ -51,32 +51,45 @@ func (s *commentService) FindAllComment() (res []resource.GetAllCommentResponse,
 
 	return res, nil
 }
-func (s *commentService) CreateComment(id int, req *resource.CreateCommentRequest) (err error) {
+
+// 혈서등록 서비스
+func (s *commentService) CreateComment(userId int, req *resource.CreateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 	// 1. 만들어진 레포지토리를 사용해서 데이터를 입력한다
-	comment := entity.Comment{
+	commentCreate := entity.Comment{
 		Content: req.Content,
 	}
 	// 2. 리턴
-	commentRepository.Create(&comment)
+	err = commentRepository.Create(&commentCreate)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
+
+// 혈서수정 서비스
 func (s *commentService) UpdateComment(id int, req *resource.UpdateCommentRequest) (err error) {
-	var commentT entity.Comment
-	commentT.ID = id
+	commentRepository := repository.NewRepository()
+	commentUpdate.ID = id
 	if req.Content != "" {
 		commentT.Content = req.Content
 	}
-	err = comment.NewCommentRepository(s.db).Update(&req)
+	commentRepository.Update()
 	if err != nil {
 		return nil
 	}
 
 	return err
 }
+
+// 혈서삭제 서비스
 func (s *commentService) DeleteComment(id int) (res *resource.DeleteCommentResponse, err error) {
-	res, err = comment.NewCommentRepository(s.db).Delete()
+	commentRepository := repository.NewRepository()
+	// 1. 만들어진 레포지토리를 사용해서 데이터를 삭제한다
+	commentRepository.Delete(id)
+
+	// 2. 리턴
 	if err != nil {
 		return nil, err
 	}
