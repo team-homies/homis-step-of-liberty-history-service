@@ -11,29 +11,14 @@ var (
 )
 
 // 라우터 path 함수
-func GetCommentPath() *core.InternalApi {
-	// Do함수는 인스턴스가 있으면 실행X
-	once.Do(func() {
-		instance = &core.InternalApi{
-			Comment: core.CommentPath{
-				GetAllComment: "/:id/comments",
-				CreateComment: "/:id/comments",
-				UpdateComment: "/:id/comments",
-				DeleteComment: "/:id/comments",
-			},
-		}
-	})
 
-	return instance
-}
-
-func GetDexEventPath() *core.InternalApi {
+func DexPath() *core.InternalApi {
 	// Do함수는 인스턴스가 있으면 실행X
 	once.Do(func() {
 		instance = &core.InternalApi{
 			DexEvent: core.DexEventPath{
-				GetDexEvent:    "/", // gRPC?
-				CreateDexEvent: "/",
+				FindDexEvent:   "/history",
+				CreateDexEvent: "/history",
 			},
 		}
 	})

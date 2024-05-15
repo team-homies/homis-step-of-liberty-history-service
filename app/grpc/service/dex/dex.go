@@ -5,8 +5,10 @@ import (
 	"main/database/repository"
 )
 
+// grpc 서비스
+
 type DexEventService interface {
-	FindDexEvent(id int64) (res *resource.DexEventResponse, err error)
+	FindDexEvent(id int) (res *resource.DexEventResponse, err error)
 }
 
 func NewDexEventService() DexEventService {
@@ -19,7 +21,8 @@ type dexEventService struct {
 	DexEventService
 }
 
-func (d *dexEventService) FindDexEvent(id int64) (res *resource.DexEventResponse, err error) {
+// [사건 내용 조회] 사건 id로 조회 : 서비스
+func (d *dexEventService) FindDexEvent(id int) (res *resource.DexEventResponse, err error) {
 	dexReposiroty := repository.NewRepository()
 
 	res = new(resource.DexEventResponse)

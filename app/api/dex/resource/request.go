@@ -2,10 +2,12 @@ package resource
 
 // Dex 요청값
 type GetDexEventRequest struct {
-	Id uint64 `json:"id" query:"id"`
+	// 쿼리
+	Id int `json:"id" query:"id"`
 }
 
 type CreateDexEventRequest struct {
-	Id      uint64 `json:"id" query:"id"`
-	Content string `json:"content"`
+	// 바디
+	UserId  int
+	EventId int `json:"id"`
 }
