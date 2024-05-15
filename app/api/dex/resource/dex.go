@@ -3,17 +3,17 @@ package resource
 import "gorm.io/gorm"
 
 // dex
-type DexEventResource struct {
+type EventResource struct {
 	gorm.Model
 	Name   string `json:"name"`
 	Level  string `json:"level"`
 	IsUsed bool   `json:"is_used"`
-	Detail DetailEventResource
+	Detail DetailResource
 }
 
-type DetailEventResource struct {
+type DetailResource struct {
 	gorm.Model
-	EventId    int    `json:"dex_id"`
+	EventId    int    `json:"event_id"`
 	Define     string `json:"define"`
 	Outline    string `json:"outline"`
 	Place      string `json:"place"`

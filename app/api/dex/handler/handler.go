@@ -30,7 +30,7 @@ func NewDexEventHandler() handler {
 func (h *dexEventHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 	// 1. id값 받아오기
-	req := new(resource.CreateDexEventRequest)
+	req := new(resource.CreateEventRequest)
 	ctx.C.BodyParser(req)
 
 	req.UserId = ctx.GetLocalsInt("user_id")
@@ -48,12 +48,15 @@ func (h *dexEventHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
 func (h *dexEventHandler) FindDexEvent(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 	// 1. id값 받아오기
-	req := new(resource.FindDexEventRequest)
-	findEventById := ctx.C.Params("id")
-	req.EventId, _ = strconv.Atoi(findEventById)
+	req := new(resource.FindEventRequest)
+	queryById := ctx.C.Params("id")
+	req.EventId, err = strconv.Atoi(queryById)
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
 
 	// 2. 서비스 함수 실행
-	res, err := h.dex.FindDexEvent(req.EventId)
+	res, err := h.service.FindDexEvent(req.EventId)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)

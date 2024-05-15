@@ -6,7 +6,8 @@ import (
 )
 
 type DexEventService interface {
-	CreateUserDex(req *resource.CreateDexEventRequest) (err error)
+	FindDexEvent(id int) (res *resource.FindEventResponse, err error)
+	CreateUserDex(req *resource.CreateEventRequest) (err error)
 }
 
 func NewDexEventService() DexEventService {
@@ -20,7 +21,7 @@ type dexEventService struct {
 }
 
 // [사용자 사건 수집 등록] 사건 id로 등록 post문 : 서비스
-func (s *dexEventService) CreateUserDex(req *resource.CreateDexEventRequest) (err error) {
+func (s *dexEventService) CreateUserDex(req *resource.CreateEventRequest) (err error) {
 	dexReposiroty := repository.NewRepository()
 	// 1. userId와 dexId가 일치하는 값 참거짓 구분
 	countDex, err := dexReposiroty.FindUserDexById(req.EventId, req.UserId)
@@ -36,4 +37,33 @@ func (s *dexEventService) CreateUserDex(req *resource.CreateDexEventRequest) (er
 
 	}
 	return
+}
+
+// [사건 내용 조회] 사건 id로 조회 : 서비스
+func (d *dexEventService) FindDexEvent(id int) (res *resource.FindEventResponse, err error) {
+	dexReposiroty := repository.NewRepository()
+
+	res = new(resource.FindEventResponse)
+
+	// 1. 만들어진 레포지토리 두개를 사용해서 각각 데이터를 가져온다
+	dexEvent, err := dexReposiroty.FindDexEventById(id)
+	if err != nil {
+		return nil, err
+	}
+	dexDetail, err := dexReposiroty.FindDexDetailById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// 2. 가져온 데이터를 하나의 객체(res)에 합친다
+	res.Name = dexEvent.Name
+	res.Level = dexEvent.Level
+	res.Detail.Define = dexDetail.Define
+	res.Detail.Outline = dexDetail.Outline
+	res.Detail.Place = dexDetail.Place
+	res.Detail.Background = dexDetail.Background
+	res.Detail.ImageUrl = dexDetail.ImageUrl
+
+	// 3. 리턴한다
+	return res, nil
 }
