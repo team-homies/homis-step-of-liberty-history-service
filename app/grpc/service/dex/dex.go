@@ -1,11 +1,10 @@
+// grpc 서비스
+// 2024.05.15 사건 내용 조회의 grpc 잠시 보류하기로 함
 package dex
 
 import (
 	"main/app/grpc/resource"
-	"main/database/repository"
 )
-
-// grpc 서비스
 
 type DexEventService interface {
 	FindDexEvent(id int) (res *resource.DexEventResponse, err error)
@@ -21,6 +20,7 @@ type dexEventService struct {
 	DexEventService
 }
 
+/*
 // [사건 내용 조회] 사건 id로 조회 : 서비스
 func (d *dexEventService) FindDexEvent(id int) (res *resource.DexEventResponse, err error) {
 	dexReposiroty := repository.NewRepository()
@@ -49,3 +49,4 @@ func (d *dexEventService) FindDexEvent(id int) (res *resource.DexEventResponse, 
 	// 3. 리턴한다
 	return res, nil
 }
+*/

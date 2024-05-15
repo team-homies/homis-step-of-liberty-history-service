@@ -1,14 +1,13 @@
+// grpc핸들러
+// 2024.05.15 사건 내용 조회의 grpc 잠시 보류하기로 함
 package grpc
 
 import (
 	"context"
 	dex "main/app/grpc/proto/dex"
-	dexService "main/app/grpc/service/dex"
 
 	"google.golang.org/grpc"
 )
-
-// grpc핸들러
 
 type GrpcService interface {
 	FindDexEvent(ctx context.Context, in *dex.DexEventRequest) (*dex.DexEventResponse, error)
@@ -26,6 +25,7 @@ func ListenGrpcServer() *grpc.Server {
 	return s
 }
 
+/*
 // [사건 내용 조회] 사건 id로 조회 : 핸들러
 func (s *grpcServer) FindDexEvent(ctx context.Context, in *dex.DexEventRequest) (*dex.DexEventResponse, error) {
 	// 1. id값 받아오기
@@ -47,3 +47,4 @@ func (s *grpcServer) FindDexEvent(ctx context.Context, in *dex.DexEventRequest) 
 		},
 	}, nil
 }
+*/

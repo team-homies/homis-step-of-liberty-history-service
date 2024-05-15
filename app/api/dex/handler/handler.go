@@ -3,7 +3,6 @@ package handler
 import (
 	"main/app/api/dex/resource"
 	"main/app/api/dex/service"
-	"main/app/grpc/service/dex"
 	"main/common/fiberkit"
 	"strconv"
 
@@ -17,7 +16,6 @@ type handler interface {
 
 type dexEventHandler struct {
 	service service.DexEventService
-	dex     dex.DexEventService
 }
 
 func NewDexEventHandler() handler {

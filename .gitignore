@@ -47,3 +47,4 @@ go.work
 
 # config.yml
 config/config.yml
+.vscode/launch.json
