@@ -21,7 +21,7 @@ func (Event) TableName() string {
 
 type Detail struct {
 	gorm.Model
-	EventId    int    `gorm:"column:dex_id;foreignKey:EventId;"`
+	EventId    int    `gorm:"column:event_id;foreignKey:EventId;"`
 	Define     string `gorm:"column:define"`
 	Outline    string `gorm:"column:outline"`
 	Place      string `gorm:"column:place"`
@@ -35,7 +35,7 @@ func (Detail) TableName() string {
 
 type UserDex struct {
 	gorm.Model
-	EventId int `gorm:"column:dex_id;foreignKey:EventId;"`
+	EventId int `gorm:"column:event_id;foreignKey:EventId;"`
 	UserId  int `gorm:"column:user_id;not null"`
 }
 
@@ -55,7 +55,7 @@ func (Tag) TableName() string {
 
 type Mapping struct {
 	Id      int `gorm:"primaryKey;column:id"`
-	EventId int `gorm:"column:dex_id;foreignKey:EventId;"`
+	EventId int `gorm:"column:event_id;foreignKey:EventId;"`
 	TagId   int `gorm:"column:tag_id;foreignKey:TagId;"`
 }
 
@@ -65,7 +65,7 @@ func (Mapping) TableName() string {
 
 type Comment struct {
 	gorm.Model
-	EventId int    `gorm:"column:dex_id;foreignKey:EventId;"`
+	EventId int    `gorm:"column:event_id;foreignKey:EventId;"`
 	UserId  int    `gorm:"column:user_id;not null"`
 	Content string `gorm:"column:content;not null"`
 }
