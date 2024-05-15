@@ -6,7 +6,7 @@ type GetAllCommentRequest struct {
 }
 
 type CreateCommentRequest struct {
-	Id      int    `json:"id" query:"id"`
+	UserId  int    `json:"user_id"`
 	Content string `json:"content"`
 }
 

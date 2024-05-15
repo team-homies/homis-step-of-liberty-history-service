@@ -11,7 +11,7 @@ import (
 // 서비스 인터페이스 선언 (메소드와 반환형 기재)
 type CommentService interface {
 	FindAllComment() (res []resource.GetAllCommentResponse, err error)
-	CreateComment(id int, req *resource.CreateCommentRequest) (err error)
+	CreateComment(userId int, req *resource.CreateCommentRequest) (err error)
 	UpdateComment(id int, req *resource.UpdateCommentRequest) (err error)
 	DeleteComment(id int) (res *resource.DeleteCommentResponse, err error)
 }
@@ -57,10 +57,11 @@ func (s *commentService) CreateComment(userId int, req *resource.CreateCommentRe
 	commentRepository := repository.NewRepository()
 	// 1. 만들어진 레포지토리를 사용해서 데이터를 입력한다
 	commentCreate := entity.Comment{
+		UserId:  req.UserId,
 		Content: req.Content,
 	}
 	// 2. 리턴
-	err = commentRepository.Create(&commentCreate)
+	commentRepository.Create(userId, &commentCreate)
 	if err != nil {
 		return err
 	}
@@ -71,16 +72,19 @@ func (s *commentService) CreateComment(userId int, req *resource.CreateCommentRe
 // 혈서수정 서비스
 func (s *commentService) UpdateComment(id int, req *resource.UpdateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
-	commentUpdate.ID = id
+	var commentUpdate entity.Comment
+	// 1. 만들어진 레포지토리를 사용해서 데이터를 수정한다
+	commentUpdate.ID = uint(id)
 	if req.Content != "" {
-		commentT.Content = req.Content
+		commentUpdate.Content = req.Content
 	}
-	commentRepository.Update()
+	// 2. 리턴
+	err = commentRepository.Update(id, &commentUpdate)
 	if err != nil {
-		return nil
+		return err
 	}
 
-	return err
+	return
 }
 
 // 혈서삭제 서비스
