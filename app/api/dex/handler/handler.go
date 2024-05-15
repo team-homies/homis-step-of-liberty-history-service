@@ -12,7 +12,7 @@ import (
 
 type handler interface {
 	CreateDexEvent(c *fiber.Ctx) error
-	GetDexEvent(c *fiber.Ctx) error
+	FindDexEvent(c *fiber.Ctx) error
 }
 
 type dexEventHandler struct {
@@ -45,13 +45,15 @@ func (h *dexEventHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
 }
 
 // [사건 내용 조회] 사건 id로 조회 : 핸들러
-func (h *dexEventHandler) GetDexEvent(c *fiber.Ctx) (err error) {
+func (h *dexEventHandler) FindDexEvent(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 	// 1. id값 받아오기
-	dexId := c.Params("id")
-	dexNum, _ := strconv.Atoi(dexId)
-	ctx.C.ParamsParser(dexId)
-	res, err := h.dex.FindDexEvent(int(dexNum))
+	req := new(resource.FindDexEventRequest)
+	findEventById := ctx.C.Params("id")
+	req.EventId, _ = strconv.Atoi(findEventById)
+
+	// 2. 서비스 함수 실행
+	res, err := h.dex.FindDexEvent(req.EventId)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)

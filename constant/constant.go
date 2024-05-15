@@ -17,7 +17,7 @@ func DexPath() *core.InternalApi {
 	once.Do(func() {
 		instance = &core.InternalApi{
 			DexEvent: core.DexEventPath{
-				FindDexEvent:   "/history",
+				FindDexEvent:   "/history/:id",
 				CreateDexEvent: "/history",
 			},
 		}
