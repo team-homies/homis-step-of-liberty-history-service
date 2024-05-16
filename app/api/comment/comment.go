@@ -13,11 +13,11 @@ func SetCommentApis(route fiber.Router) {
 	h := handler.NewCommentHandler()
 
 	// 혈서 list 목록
-	route.Get(constant.GetCommentPath().Comment.GetAllComment, h.FindAllComment)
+	route.Get(constant.CommentPath().Comment.FindAllComment, h.FindAllComment)
 	// 혈서 등록
-	route.Post(constant.GetCommentPath().Comment.CreateComment, h.CreateComment)
+	route.Post(constant.CommentPath().Comment.CreateComment, h.CreateComment)
 	// 혈서 수정
-	route.Put(constant.GetCommentPath().Comment.UpdateComment, h.UpdateComment)
+	route.Put(constant.CommentPath().Comment.UpdateComment, h.UpdateComment)
 	// 혈서 제거
-	route.Delete(constant.GetCommentPath().Comment.DeleteComment, h.DeleteComment)
+	route.Delete(constant.CommentPath().Comment.DeleteComment, h.DeleteComment)
 }

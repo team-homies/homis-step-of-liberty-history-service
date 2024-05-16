@@ -8,8 +8,7 @@ import (
 
 // 라우터 comment.SetApis
 func InitRoutes(app *fiber.App) {
-	commentApi := app.Group("/history")
-	comment.SetCommentApis(commentApi)
-	// dexApi := app.Group("/history")
-	// dex.SetDexEventApis(dexApi)
+	commentGroup := app.Group("/history")
+	comment.SetCommentApis(commentGroup)
+
 }

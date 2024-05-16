@@ -2,7 +2,7 @@ package resource
 
 // comment
 type CommentResource struct {
-	Id      int    `json:"id"`
+	EventId int    `json:"event_id"`
 	UserId  int    `json:"user_id"`
 	Content string `json:"content"`
 }
