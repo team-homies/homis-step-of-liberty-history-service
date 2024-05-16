@@ -2,22 +2,9 @@
 package core
 
 type InternalApi struct {
-	Patient PatientPath
-	Doctor  DoctorPath
+	Dex DexPath
 }
 
-type PatientPath struct {
-	GetPatient    string
-	GetPatients   string
-	CreatePatient string
-	UpdatePatient string
-	DeletePatient string
-}
-
-type DoctorPath struct {
-	GetDoctor     string
-	GetPatients   string
-	CreatePatient string
-	UpdatePatient string
-	DeletePatient string
+type DexPath struct {
+	GetTags string
 }
