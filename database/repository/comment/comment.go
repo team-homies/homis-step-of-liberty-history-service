@@ -9,8 +9,8 @@ import (
 // Comment 레포지토리 인터페이스
 type CommentRepository interface {
 	FindAll() (res []entity.Comment, err error)
-	Create(req *entity.Comment) (err error)
-	Update(req *entity.Comment) (err error)
+	Create(userId uint64, content string) (err error)
+	Update(id uint64, content string) (err error)
 	Delete(id int) (res *entity.Comment, err error)
 }
 
