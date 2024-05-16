@@ -2,7 +2,6 @@ package service
 
 import (
 	"main/app/api/comment/resource"
-	"main/database/entity"
 	"main/database/repository"
 
 	"gorm.io/gorm"
@@ -56,12 +55,11 @@ func (s *commentService) FindAllComment() (res []resource.GetAllCommentResponse,
 func (s *commentService) CreateComment(userId int, req *resource.CreateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 	// 1. 만들어진 레포지토리를 사용해서 데이터를 입력한다
-	commentCreate := entity.Comment{
-		UserId:  req.UserId,
-		Content: req.Content,
-	}
+	// commentCreate := entity.Comment{
+	// 	Content: req.Content,
+	// }
 	// 2. 리턴
-	commentRepository.Create(userId, &commentCreate)
+	err = commentRepository.Create(uint64(req.Id), req.Content)
 	if err != nil {
 		return err
 	}
@@ -72,14 +70,18 @@ func (s *commentService) CreateComment(userId int, req *resource.CreateCommentRe
 // 혈서수정 서비스
 func (s *commentService) UpdateComment(id int, req *resource.UpdateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
-	var commentUpdate entity.Comment
-	// 1. 만들어진 레포지토리를 사용해서 데이터를 수정한다
-	commentUpdate.ID = uint(id)
-	if req.Content != "" {
-		commentUpdate.Content = req.Content
-	}
-	// 2. 리턴
-	err = commentRepository.Update(id, &commentUpdate)
+
+	// 어떤 유저인지 조건이 없음
+	err = commentRepository.Update(
+		uint64(req.Id),
+		req.Content,
+	)
+
+	// commentUpdate.ID = id
+	// if req.Content != "" {
+	// commentT.Content = req.Content
+	// }
+	// commentRepository.Update()
 	if err != nil {
 		return err
 	}
