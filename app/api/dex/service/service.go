@@ -19,7 +19,7 @@ type dexService struct {
 	DexService
 }
 
-func (p *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
+func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
 	res = []resource.GetTagsResponse{}
 	tags, err := repository.NewRepository().GetTags()
 	if err != nil {
