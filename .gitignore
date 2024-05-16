@@ -49,4 +49,4 @@ go.work
 config/config.yml
 
 # launch.json
-.vscode/launch.json
+.vscode/*
