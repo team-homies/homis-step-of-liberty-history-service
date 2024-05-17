@@ -76,12 +76,12 @@ func (g *gormCommentRepository) Update(id int, content string) (err error) {
 	return err
 }
 
-// 혈서삭제
+// [혈서 삭제] EventId 입력 후 UserId로 삭제 : 레포지토리
 func (g *gormCommentRepository) Delete(eventId int, userId int) (res *entity.Comment, err error) {
 	// 1. 쿼리 작성
-	// delete
-	//   from "comment"
-	//  where id = 4;
+	// 	delete
+	// 	from "comment"
+	//  where event_id = 7 and user_id = 1;
 
 	// 2. gorm 적용
 	tx := g.db.Begin()
