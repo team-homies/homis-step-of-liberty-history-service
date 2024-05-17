@@ -5,7 +5,7 @@ import (
 	"main/app"
 	"main/config"
 	"main/database"
-	"net"
+	"net"`
 
 	"github.com/spf13/viper"
 )
@@ -24,7 +24,7 @@ func main() {
 	// fiber
 	fiber := app.InitFiber()
 
-	port := viper.GetString(viper.GetString(config.APP_PORT))
+	port := viper.GetString(config.APP_PORT)
 	go fiber.Listen(port)
 
 	// grpc
