@@ -89,16 +89,21 @@ func (s *commentService) UpdateComment(id int, req *resource.UpdateCommentReques
 	return
 }
 
-// 혈서삭제 서비스
+// [혈서 삭제] EventId 입력 후 UserId로 삭제 : 핸들러
 func (s *commentService) DeleteComment(eventId int, userId int) (res *resource.DeleteCommentResponse, err error) {
 	commentRepository := repository.NewRepository()
-	// 1. 만들어진 레포지토리를 사용해서 데이터를 삭제한다
-	res, err = commentRepository.Delete(eventId, userId)
+	res = new(resource.DeleteCommentResponse)
 
-	// 2. 리턴
+	// 1. 만들어진 레포지토리를 사용해서 데이터를 삭제한다
+	commentDel, err := commentRepository.Delete(eventId, userId)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return err
+	// 2. 삭제한 데이터를 res에 적용
+	res.UserId = commentDel.UserId
+	res.Content = commentDel.Content
+
+	// 3. 리턴
+	return res, nil
 }
