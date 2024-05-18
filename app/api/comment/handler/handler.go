@@ -83,14 +83,20 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 // [혈서 삭제] EventId 입력 후 UserId로 삭제 : 핸들러
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
+	// 1. eventId값 받아오기
 	req := new(resource.DeleteCommentRequest)
 	queryById := ctx.C.Params("id")
 	req.EventId, err = strconv.Atoi(queryById)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
+	// 2. userId값 받아오기
+	ctx.C.BodyParser(req)
+	ctx.C.Locals("user_id", req)
+	req.UserId = ctx.GetLocalsInt("user_id")
 
-	res, err := h.service.DeleteComment(req.EventId)
+	// 3. 서비스 함수 실행
+	res, err := h.service.DeleteComment(req.EventId, req.UserId)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
