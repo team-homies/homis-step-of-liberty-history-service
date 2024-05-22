@@ -37,8 +37,8 @@ func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 
 	// 1. id값 받아오기
 	req := new(resource.FindAllCommentRequest)
-	queryById := ctx.C.Params("id")
-	req.EventId, err = strconv.Atoi(queryById)
+	idByParam := ctx.C.Params("id")
+	req.EventId, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
@@ -73,7 +73,6 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 
 	// 3. 서비스 함수 실행
 	err = h.service.CreateComment(req)
-
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
@@ -83,12 +82,25 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 // [혈서 수정] query : EventId, body : UserId, Content
 func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
-	id := c.Params("id")
-	num, _ := strconv.Atoi(id)
-	req := new(resource.UpdateCommentRequest)
-	ctx.C.ParamsParser(req)
-	err = h.service.UpdateComment(num, req)
 
+	req := new(resource.UpdateCommentRequest)
+	err = ctx.C.BodyParser(req)
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
+
+	// 1. eventId값 받아오기
+	idByParam := ctx.C.Params("id")
+	req.EventId, err = strconv.Atoi(idByParam)
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
+
+	// 2. userId값 받아오기
+	req.UserId = ctx.GetLocalsInt("user_id")
+
+	// 3. 서비스 함수 실행
+	err = h.service.UpdateComment(req)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
@@ -99,22 +111,23 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
-	// 1. eventId값 받아오기
 	req := new(resource.DeleteCommentRequest)
-	queryById := ctx.C.Params("id")
-	req.EventId, err = strconv.Atoi(queryById)
+	ctx.C.BodyParser(req)
+
+	// 1. eventId값 받아오기
+	idByParam := ctx.C.Params("id")
+	req.EventId, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
 
 	// 2. userId값 받아오기
-	ctx.C.BodyParser(req)
 	req.UserId = ctx.GetLocalsInt("user_id")
 
 	// 3. 서비스 함수 실행
-	res, err := h.service.DeleteComment(req.EventId, req)
+	err = h.service.DeleteComment(req)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
-	return ctx.HttpOK(res)
+	return ctx.HttpOK(err)
 }

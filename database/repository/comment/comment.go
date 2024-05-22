@@ -8,10 +8,10 @@ import (
 
 // Comment 레포지토리 인터페이스
 type CommentRepository interface {
-	FindAll(eventId int) (res []entity.Comment, err error)
-	Create(eventId int, req *entity.Comment) (err error)
-	Update(eventId int, req *entity.Comment) (err error)
-	Delete(eventId int, req *entity.Comment) (res *entity.Comment, err error)
+	FindAll(eventId int) (result []entity.Comment, err error)
+	Create(comment *entity.Comment) (err error)
+	Update(comment *entity.Comment) (err error)
+	Delete(comment *entity.Comment) (err error)
 }
 
 type gormCommentRepository struct {
@@ -23,41 +23,38 @@ func NewCommentRepository(db *gorm.DB) CommentRepository {
 }
 
 // [혈서 목록 조회] query : EventId
-func (g *gormCommentRepository) FindAll(eventId int) (res []entity.Comment, err error) {
+func (g *gormCommentRepository) FindAll(eventId int) (result []entity.Comment, err error) {
 	// 1. 쿼리 작성
 	// select (id, event_id, user_id, content) from comment
 
 	// 2. gorm 적용
 	tx := g.db
-	tx.Model(&entity.Comment{}).Select("user_id", "content").Where("event_id = ?", eventId).Find(&res)
-	if tx.Error != nil {
-		return nil, tx.Error
+	err = tx.Model(&entity.Comment{}).Select("user_id", "content").Where("event_id = ?", eventId).Find(&result).Error
+	if err != nil {
+		return
 	}
-	return res, nil
+	return
 }
 
 // [혈서 등록] query : EventId, body : UserId, Content
-func (g *gormCommentRepository) Create(eventId int, req *entity.Comment) (err error) {
+func (g *gormCommentRepository) Create(comment *entity.Comment) (err error) {
 	// 1. 쿼리 작성
 	// insert into comment (id, event_id, user_id, content)
 	// values (1, 1, 1, "내용")
 
 	// 2. gorm 적용
 	tx := g.db.Begin()
-	tx.Model(&entity.Comment{}).Create(&entity.Comment{
-		UserId:  req.UserId,
-		Content: req.Content,
-	})
-	if tx.Error != nil {
+	err = tx.Model(&entity.Comment{}).Create(&comment).Error
+	if err != nil {
 		tx.Rollback()
-		return tx.Error
+		return
 	}
 	tx.Commit()
-	return tx.Error
+	return
 }
 
 // [혈서 수정] query : EventId, body : UserId, Content
-func (g *gormCommentRepository) Update(eventId int, req *entity.Comment) (err error) {
+func (g *gormCommentRepository) Update(comment *entity.Comment) (err error) {
 	// 1. 쿼리 작성
 	// update "comment"
 	//    set content = '수정내용'
@@ -65,33 +62,35 @@ func (g *gormCommentRepository) Update(eventId int, req *entity.Comment) (err er
 
 	// 2. gorm 적용
 	tx := g.db.Begin()
-	tx.Model(&entity.Comment{}).Where("event_id = ?", req.EventId).Updates(req.Content)
+	err = tx.Model(&entity.Comment{}).Where("event_id = ?", comment.EventId).Updates(&comment).Error
 
-	if tx.Error != nil {
+	if err != nil {
 		tx.Rollback()
-		return tx.Error
+		return
 	}
 	tx.Commit()
 
-	return err
+	return
 }
 
 // [혈서 삭제] query : EventId, body : UserId
-func (g *gormCommentRepository) Delete(eventId int, req *entity.Comment) (res *entity.Comment, err error) {
+func (g *gormCommentRepository) Delete(comment *entity.Comment) (err error) {
 	// 1. 쿼리 작성
 	// 	delete
 	// 	from "comment"
 	//  where event_id = 7 and user_id = 1;
 
+	// deleted_at에 값이 null인 값을 삭제
+	var result entity.Comment
 	// 2. gorm 적용
 	tx := g.db.Begin()
-	tx.Model(&entity.Comment{}).Where("event_id = ?", eventId).Where("user_id = ?", req.UserId).First(&res)
-	tx.Delete(&res)
+	err = tx.Model(&entity.Comment{}).Where("event_id = ?", comment.EventId).Where("user_id = ?", comment.UserId).Delete(&result).Error
+	// tx.Delete(&result)
 
-	if tx.Error != nil {
+	if err != nil {
 		tx.Rollback()
-		return nil, tx.Error
+		return
 	}
 	tx.Commit()
-	return res, nil
+	return
 }
