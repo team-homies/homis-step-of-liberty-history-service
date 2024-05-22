@@ -11,10 +11,10 @@ import (
 
 // 핸들러 인터페이스 선언 (메소드와 반환형 기재)
 type handler interface {
-	FindAllComment(c *fiber.Ctx) error
-	CreateComment(c *fiber.Ctx) error
-	UpdateComment(c *fiber.Ctx) error
-	DeleteComment(c *fiber.Ctx) error
+	FindAllComment(c *fiber.Ctx) (err error)
+	CreateComment(c *fiber.Ctx) (err error)
+	UpdateComment(c *fiber.Ctx) (err error)
+	DeleteComment(c *fiber.Ctx) (err error)
 }
 
 // commentHandler형 선언
@@ -31,9 +31,10 @@ func NewCommentHandler() handler {
 	}
 }
 
-// [혈서 목록 조회] EventId로 조회 : 핸들러
+// [혈서 목록 조회] query : EventId
 func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
+
 	// 1. id값 받아오기
 	req := new(resource.FindAllCommentRequest)
 	queryById := ctx.C.Params("id")
@@ -50,14 +51,28 @@ func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(res)
 }
 
-// [혈서 등록] EventId 입력 후 UserId, Content 등록 : 핸들러
+// [혈서 등록] query : EventId, body : UserId, Content
 func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
-	id := c.Params("id")
-	num, _ := strconv.Atoi(id)
+
 	req := new(resource.CreateCommentRequest)
-	ctx.C.ParamsParser(req)
-	err = h.service.CreateComment(num, req)
+	err = ctx.C.BodyParser(req)
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
+
+	// 1. eventId값 받아오기
+	idByParam := ctx.C.Params("id")
+	req.EventId, err = strconv.Atoi(idByParam)
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
+
+	// 2. userId값 받아오기
+	req.UserId = ctx.GetLocalsInt("user_id")
+
+	// 3. 서비스 함수 실행
+	err = h.service.CreateComment(req)
 
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
@@ -65,7 +80,7 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(err)
 }
 
-// [혈서 수정] EventId 입력 후 UserId, Content 수정 : 핸들러
+// [혈서 수정] query : EventId, body : UserId, Content
 func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 	id := c.Params("id")
@@ -80,9 +95,10 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(err)
 }
 
-// [혈서 삭제] EventId 입력 후 UserId로 삭제 : 핸들러
+// [혈서 삭제] query : EventId, body : UserId
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
+
 	// 1. eventId값 받아오기
 	req := new(resource.DeleteCommentRequest)
 	queryById := ctx.C.Params("id")
@@ -90,14 +106,13 @@ func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
+
 	// 2. userId값 받아오기
 	ctx.C.BodyParser(req)
-	ctx.C.Locals("user_id", req)
 	req.UserId = ctx.GetLocalsInt("user_id")
 
 	// 3. 서비스 함수 실행
-	res, err := h.service.DeleteComment(req.EventId, req.UserId)
-
+	res, err := h.service.DeleteComment(req.EventId, req)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}

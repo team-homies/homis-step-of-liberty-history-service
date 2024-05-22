@@ -2,6 +2,7 @@ package service
 
 import (
 	"main/app/api/comment/resource"
+	"main/database/entity"
 	"main/database/repository"
 
 	"gorm.io/gorm"
@@ -9,10 +10,10 @@ import (
 
 // 서비스 인터페이스 선언 (메소드와 반환형 기재)
 type CommentService interface {
-	FindAllComment(id int) (res []resource.FindAllCommentResponse, err error)
-	CreateComment(userId int, req *resource.CreateCommentRequest) (err error)
-	UpdateComment(id int, req *resource.UpdateCommentRequest) (err error)
-	DeleteComment(eventId int, userId int) (res *resource.DeleteCommentResponse, err error)
+	FindAllComment(eventId int) (res []resource.FindAllCommentResponse, err error)
+	CreateComment(req *resource.CreateCommentRequest) (err error)
+	UpdateComment(eventId int, req *resource.UpdateCommentRequest) (err error)
+	DeleteComment(eventId int, req *resource.DeleteCommentRequest) (res *resource.DeleteCommentResponse, err error)
 }
 
 // 함수를 CommentService형으로 선언
@@ -29,13 +30,13 @@ type commentService struct {
 	db *gorm.DB
 }
 
-// [혈서목록조회] EventId로 조회 : 서비스
-func (s *commentService) FindAllComment(id int) (res []resource.FindAllCommentResponse, err error) {
+// [혈서 목록 조회] query : EventId
+func (s *commentService) FindAllComment(eventId int) (res []resource.FindAllCommentResponse, err error) {
 	commentRepository := repository.NewRepository()
 	res = []resource.FindAllCommentResponse{}
 
 	// 1. 만들어진 레포지토리를 사용해서 데이터를 가져온다
-	commentFind, err := commentRepository.FindAll()
+	commentFind, err := commentRepository.FindAll(eventId)
 	if err != nil {
 		return nil, err
 	}
@@ -51,15 +52,17 @@ func (s *commentService) FindAllComment(id int) (res []resource.FindAllCommentRe
 	return res, nil
 }
 
-// 혈서등록 서비스
-func (s *commentService) CreateComment(userId int, req *resource.CreateCommentRequest) (err error) {
+// [혈서 등록] query : EventId, body : UserId, Content
+func (s *commentService) CreateComment(req *resource.CreateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
+
 	// 1. 만들어진 레포지토리를 사용해서 데이터를 입력한다
-	// commentCreate := entity.Comment{
-	// 	Content: req.Content,
-	// }
+	comments := entity.Comment{
+		Content: req.Content,
+	}
+
 	// 2. 리턴
-	err = commentRepository.Create(req.UserId, req.Content)
+	err = commentRepository.Create(req.EventId, &comments)
 	if err != nil {
 		return err
 	}
@@ -67,15 +70,12 @@ func (s *commentService) CreateComment(userId int, req *resource.CreateCommentRe
 	return nil
 }
 
-// 혈서수정 서비스
-func (s *commentService) UpdateComment(id int, req *resource.UpdateCommentRequest) (err error) {
+// [혈서 수정] query : EventId, body : UserId, Content
+func (s *commentService) UpdateComment(eventId int, req *resource.UpdateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
 	// 어떤 유저인지 조건이 없음
-	err = commentRepository.Update(
-		req.UserId,
-		req.Content,
-	)
+	err = commentRepository.Update(eventId, req)
 
 	// commentUpdate.ID = id
 	// if req.Content != "" {
@@ -89,21 +89,21 @@ func (s *commentService) UpdateComment(id int, req *resource.UpdateCommentReques
 	return
 }
 
-// [혈서 삭제] EventId 입력 후 UserId로 삭제 : 핸들러
-func (s *commentService) DeleteComment(eventId int, userId int) (res *resource.DeleteCommentResponse, err error) {
+// [혈서 삭제] query : EventId, body : UserId
+func (s *commentService) DeleteComment(eventId int, req *resource.DeleteCommentRequest) (res *resource.DeleteCommentResponse, err error) {
 	commentRepository := repository.NewRepository()
+	req = new(resource.DeleteCommentRequest)
 	res = new(resource.DeleteCommentResponse)
 
 	// 1. 만들어진 레포지토리를 사용해서 데이터를 삭제한다
-	commentDel, err := commentRepository.Delete(eventId, userId)
+	commentDel, err := commentRepository.Delete(eventId, req)
 	if err != nil {
 		return nil, err
 	}
 
-	// 2. 삭제한 데이터를 res에 적용
+	// 2. 지운 데이터를 res에 반영시킨다
 	res.UserId = commentDel.UserId
 	res.Content = commentDel.Content
-
 	// 3. 리턴
 	return res, nil
 }

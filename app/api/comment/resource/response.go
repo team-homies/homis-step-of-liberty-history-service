@@ -7,13 +7,11 @@ type FindAllCommentResponse struct {
 }
 
 type CreateCommentResponse struct {
-	EventId int    `json:"event_id"`
 	UserId  int    `json:"user_id"`
 	Content string `json:"content"`
 }
 
 type UpdateCommentResponse struct {
-	EventId int    `json:"event_id"`
 	UserId  int    `json:"user_id"`
 	Content string `json:"content"`
 }
