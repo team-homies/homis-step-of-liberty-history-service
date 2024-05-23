@@ -1,4 +1,4 @@
-package comment
+package dex
 
 import (
 	"main/app/api/dex/handler"
@@ -9,8 +9,8 @@ import (
 )
 
 // router에 들어가는 함수
-func SetDexEventApis(route fiber.Router) {
-	h := handler.NewDexEventHandler()
+func SetDexApis(route fiber.Router) {
+	h := handler.NewDexHandler()
 
 	// 사건 내용 조회
 	route.Get(constant.DexPath().DexEvent.FindDexEvent, h.FindDexEvent)

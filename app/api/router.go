@@ -9,5 +9,5 @@ import (
 // 라우터 comment.SetApis
 func InitRoutes(app *fiber.App) {
 	dexApi := app.Group("")
-	dex.SetDexEventApis(dexApi)
+	dex.SetDexApis(dexApi)
 }

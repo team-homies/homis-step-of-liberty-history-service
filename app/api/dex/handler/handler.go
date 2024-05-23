@@ -18,7 +18,7 @@ type dexEventHandler struct {
 	service service.DexEventService
 }
 
-func NewDexEventHandler() handler {
+func NewDexHandler() handler {
 	return &dexEventHandler{
 		service: service.NewDexEventService(),
 	}
@@ -47,8 +47,8 @@ func (h *dexEventHandler) FindDexEvent(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 	// 1. id값 받아오기
 	req := new(resource.FindEventRequest)
-	queryById := ctx.C.Params("id")
-	req.EventId, err = strconv.Atoi(queryById)
+	idByParam := ctx.C.Params("id")
+	req.EventId, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
