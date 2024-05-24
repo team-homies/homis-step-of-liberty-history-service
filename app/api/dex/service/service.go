@@ -56,13 +56,18 @@ func (d *dexEventService) FindDexEvent(id int) (res *resource.FindEventResponse,
 	}
 
 	// 2. 가져온 데이터를 하나의 객체(res)에 합친다
-	res.Name = dexEvent.Name
-	res.Level = dexEvent.Level
-	res.Detail.Define = dexDetail.Define
-	res.Detail.Outline = dexDetail.Outline
-	res.Detail.Place = dexDetail.Place
-	res.Detail.Background = dexDetail.Background
-	res.Detail.ImageUrl = dexDetail.ImageUrl
+
+	res = &resource.FindEventResponse{
+		Name:  dexEvent.Name,
+		Level: dexEvent.Level,
+		Detail: resource.FindDetailResponse{
+			Define:     dexDetail.Define,
+			Outline:    dexDetail.Outline,
+			Place:      dexDetail.Place,
+			Background: dexDetail.Background,
+			ImageUrl:   dexDetail.ImageUrl,
+		},
+	}
 
 	// 3. 리턴한다
 	return res, nil

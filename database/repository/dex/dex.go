@@ -31,12 +31,12 @@ func (g *gormDexRepository) FindDexEventById(id int) (res *entity.Event, err err
 
 	// 2. gorm로직
 	tx := g.db
-	tx.Model(&entity.Event{}).Select("name", "level").Where("id = ?", id).First(&res)
+	err = tx.Model(&entity.Event{}).Select("name", "level").Where("id = ?", id).First(&res).Error
 
-	if tx.Error != nil {
-		return nil, tx.Error
+	if err != nil {
+		return
 	}
-	return res, nil
+	return
 }
 
 // [사건 내용 조회] 사건 detail id로 조회 select문
@@ -48,12 +48,12 @@ func (g *gormDexRepository) FindDexDetailById(id int) (res *entity.Detail, err e
 
 	// 2. gorm로직
 	tx := g.db
-	tx.Model(&entity.Detail{}).Select("define", "outline", "place", "background", "image_url").Where("event_id = ?", id).First(&res)
+	err = tx.Model(&entity.Detail{}).Select("define", "outline", "place", "background", "image_url").Where("event_id = ?", id).First(&res).Error
 
-	if tx.Error != nil {
-		return nil, tx.Error
+	if err != nil {
+		return
 	}
-	return res, nil
+	return
 }
 
 // [사용자 사건 수집 등록] 사건 id로 조회 select문 : 사건보유 여부 위함
@@ -64,11 +64,11 @@ func (g *gormDexRepository) FindUserDexById(eventId int, userId int) (res int, e
 	// 2. gorm로직
 	var dexCount int64
 	tx := g.db
-	tx.Model(&entity.UserDex{}).Where("event_id = ?", eventId).Where("user_id = ?", userId).Count(&dexCount)
-	if tx.Error != nil {
-		return 0, tx.Error
+	err = tx.Model(&entity.UserDex{}).Where("event_id = ?", eventId).Where("user_id = ?", userId).Count(&dexCount).Error
+	if err != nil {
+		return
 	}
-	return int(dexCount), nil
+	return
 }
 
 // [사용자 사건 수집 등록] 사건 id로 등록 post문
@@ -79,14 +79,14 @@ func (g *gormDexRepository) CreateUserDexById(eventId int, userId int) (err erro
 
 	// 2. gorm로직
 	tx := g.db.Begin()
-	tx.Model(&entity.UserDex{}).Create(&entity.UserDex{
+	err = tx.Model(&entity.UserDex{}).Create(&entity.UserDex{
 		EventId: eventId,
 		UserId:  userId,
-	})
-	if tx.Error != nil {
+	}).Error
+	if err != nil {
 		tx.Rollback()
-		return err
+		return
 	}
 	tx.Commit()
-	return nil
+	return
 }
