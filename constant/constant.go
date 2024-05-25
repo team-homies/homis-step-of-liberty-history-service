@@ -10,18 +10,20 @@ var (
 	once     sync.Once
 )
 
-func GetPath() *core.InternalApi {
+// 라우터 path 함수
+
+func DexPath() *core.InternalApi {
+	// Do함수는 인스턴스가 있으면 실행X
 	once.Do(func() {
 		instance = &core.InternalApi{
-			Patient: core.PatientPath{
-				GetPatient:    "/patient",
-				GetPatients:   "/patient/list",
-				CreatePatient: "/patient",
-				UpdatePatient: "/patient",
-				DeletePatient: "/patient",
+			DexEvent: core.DexEventPath{
+				FindDexEvent:   "/history/:id",
+				CreateDexEvent: "/history",
 			},
 		}
 	})
 
 	return instance
 }
+
+// Do의 역할 instance 안에 내용이 없을 때 실행된다. (싱글톤패턴)
