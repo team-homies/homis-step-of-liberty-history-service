@@ -22,7 +22,7 @@ func NewCommentRepository(db *gorm.DB) CommentRepository {
 	return &gormCommentRepository{db}
 }
 
-// [혈서 목록 조회] query : Id
+// [혈서 목록 조회] Param : Id
 func (g *gormCommentRepository) FindAll(Id int) (result []entity.Comment, err error) {
 	// 1. 쿼리 작성
 	// select (id, event_id, user_id, content) from comment
@@ -36,7 +36,7 @@ func (g *gormCommentRepository) FindAll(Id int) (result []entity.Comment, err er
 	return
 }
 
-// [혈서 등록] query : Id, body : UserId, Content
+// [혈서 등록] Param : Id, body : UserId, Content
 func (g *gormCommentRepository) Create(comment *entity.Comment) (err error) {
 	// 1. 쿼리 작성
 	// insert into comment (id, event_id, user_id, content)
@@ -53,7 +53,7 @@ func (g *gormCommentRepository) Create(comment *entity.Comment) (err error) {
 	return
 }
 
-// [혈서 수정] query : Id, body : UserId, Content
+// [혈서 수정] Param : Id, body : UserId, Content
 func (g *gormCommentRepository) Update(comment *entity.Comment) (err error) {
 	// 1. 쿼리 작성
 	// update "comment"
@@ -73,7 +73,7 @@ func (g *gormCommentRepository) Update(comment *entity.Comment) (err error) {
 	return
 }
 
-// [혈서 삭제] query : Id, body : UserId
+// [혈서 삭제] Param : Id, body : UserId
 func (g *gormCommentRepository) Delete(comment *entity.Comment) (err error) {
 	// 1. 쿼리 작성
 	// 	delete

@@ -8,12 +8,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// router에 들어가는 함수
 func SetCommentApis(route fiber.Router) {
 	// /history
 	h := handler.NewCommentHandler()
 
-	// 혈서 list 목록
+	// 혈서 목록 조회
 	route.Get(constant.CommentPath().Comment.FindAllComment, h.FindAllComment)
 	// 혈서 등록
 	route.Post(constant.CommentPath().Comment.CreateComment, middleware.JWTMiddleware, h.CreateComment)

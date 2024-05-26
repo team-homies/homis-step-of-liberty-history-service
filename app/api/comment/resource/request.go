@@ -1,13 +1,12 @@
 package resource
 
-// comment 요청값
 type FindAllCommentRequest struct {
-	// 라우터에 포함될 Id Params
+	// 라우터에 포함될 Id Param
 	Id int `json:"id" param:"id"`
 }
 
 type CreateCommentRequest struct {
-	// 라우터에 포함될 Id Params
+	// 라우터에 포함될 Id Param
 	Id int `json:"d" param:"id"`
 	// 등록할 UserId와 Content body
 	UserId  int    `json:"user_id"`
@@ -15,7 +14,7 @@ type CreateCommentRequest struct {
 }
 
 type UpdateCommentRequest struct {
-	// 라우터에 포함될 Id Params
+	// 라우터에 포함될 Id Param
 	Id int `json:"id" param:"id"`
 	// 수정할 UserId와 Content body
 	UserId  int    `json:"user_id"`
@@ -23,7 +22,7 @@ type UpdateCommentRequest struct {
 }
 
 type DeleteCommentRequest struct {
-	// 라우터에 포함될 Id Params
+	// 라우터에 포함될 Id Param
 	Id int `json:"id" param:"id"`
 	// 삭제할 UserId body
 	UserId int `json:"user_id"`

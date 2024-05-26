@@ -31,7 +31,7 @@ func NewCommentHandler() handler {
 	}
 }
 
-// [혈서 목록 조회] query : Id
+// [혈서 목록 조회] Param : Id
 func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -51,7 +51,7 @@ func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(res)
 }
 
-// [혈서 등록] query : Id, body : UserId, Content
+// [혈서 등록] Param : Id, body : UserId, Content
 func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -79,7 +79,7 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(err)
 }
 
-// [혈서 수정] query : Id, body : Id, Content
+// [혈서 수정] Param : Id, body : Id, Content
 func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -107,7 +107,7 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(err)
 }
 
-// [혈서 삭제] query : Id, body : Id
+// [혈서 삭제] Param : Id, body : Id
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 

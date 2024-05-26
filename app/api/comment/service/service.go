@@ -29,7 +29,7 @@ type commentService struct {
 	CommentService
 }
 
-// [혈서 목록 조회] query : EventId
+// [혈서 목록 조회] Param : EventId
 func (s *commentService) FindAllComment(eventId int) (res []resource.FindAllCommentResponse, err error) {
 	commentRepository := repository.NewRepository()
 	res = []resource.FindAllCommentResponse{}
@@ -51,7 +51,7 @@ func (s *commentService) FindAllComment(eventId int) (res []resource.FindAllComm
 	return
 }
 
-// [혈서 등록] query : Id, body : UserId, Content
+// [혈서 등록] Param : Id, body : UserId, Content
 func (s *commentService) CreateComment(req *resource.CreateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
@@ -74,7 +74,7 @@ func (s *commentService) CreateComment(req *resource.CreateCommentRequest) (err 
 	return
 }
 
-// [혈서 수정] query : Id, body : Id, Content
+// [혈서 수정] Param : Id, body : Id, Content
 func (s *commentService) UpdateComment(req *resource.UpdateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
@@ -98,7 +98,7 @@ func (s *commentService) UpdateComment(req *resource.UpdateCommentRequest) (err 
 	return
 }
 
-// [혈서 삭제] query : Id, body : Id
+// [혈서 삭제] Param : Id, body : Id
 func (s *commentService) DeleteComment(req *resource.DeleteCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
