@@ -81,8 +81,8 @@ func (s *commentService) UpdateComment(req *resource.UpdateCommentRequest) (err 
 	// 1. 받아온 parameter들을 변수에 저장한다
 	var comment entity.Comment
 	comment.Model.ID = uint(req.Id)
-	if req.UserId != 0 {
-		comment.UserId = req.UserId
+	if req.Id != 0 {
+		comment.Model.ID = uint(req.Id)
 	}
 	if req.Content != "" {
 		comment.Content = req.Content
