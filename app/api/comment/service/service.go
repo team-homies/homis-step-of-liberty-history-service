@@ -4,6 +4,8 @@ import (
 	"main/app/api/comment/resource"
 	"main/database/entity"
 	"main/database/repository"
+
+	"gorm.io/gorm"
 )
 
 // 서비스 인터페이스 선언 (메소드와 반환형 기재)
@@ -46,16 +48,18 @@ func (s *commentService) FindAllComment(eventId int) (res []resource.FindAllComm
 	}
 
 	// 2. 리턴한다
-	return res, nil
+	return
 }
 
-// [혈서 등록] query : EventId, body : UserId, Content
+// [혈서 등록] query : Id, body : UserId, Content
 func (s *commentService) CreateComment(req *resource.CreateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
 	// 1. 받아온 parameter들을 변수에 저장한다
 	commentCreate := entity.Comment{
-		EventId: req.EventId,
+		Model: gorm.Model{
+			ID: uint(req.Id),
+		},
 		UserId:  req.UserId,
 		Content: req.Content,
 	}
@@ -67,27 +71,22 @@ func (s *commentService) CreateComment(req *resource.CreateCommentRequest) (err 
 	}
 
 	// 3. 리턴
-	return nil
+	return
 }
 
-// [혈서 수정] query : EventId, body : UserId, Content
+// [혈서 수정] query : Id, body : Id, Content
 func (s *commentService) UpdateComment(req *resource.UpdateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
 	// 1. 받아온 parameter들을 변수에 저장한다
 	var comment entity.Comment
-	comment.EventId = req.EventId
+	comment.Model.ID = uint(req.Id)
 	if req.UserId != 0 {
 		comment.UserId = req.UserId
 	}
 	if req.Content != "" {
 		comment.Content = req.Content
 	}
-	// commentUpdate := entity.Comment{
-	// 	EventId: req.EventId,
-	// 	UserId:  req.UserId,
-	// 	Content: req.Content,
-	// }
 
 	// 2. 만들어진 레포지토리를 사용해서 데이터를 수정
 	err = commentRepository.Update(&comment)
@@ -99,14 +98,15 @@ func (s *commentService) UpdateComment(req *resource.UpdateCommentRequest) (err 
 	return
 }
 
-// [혈서 삭제] query : EventId, body : UserId
+// [혈서 삭제] query : Id, body : Id
 func (s *commentService) DeleteComment(req *resource.DeleteCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
 	// 1. 받아온 parameter들을 변수에 저장한다
 	commentDelete := entity.Comment{
-		EventId: req.EventId,
-		UserId:  req.UserId,
+		Model: gorm.Model{
+			ID: uint(req.Id),
+		},
 	}
 
 	// 2. 만들어진 레포지토리를 사용해서 데이터를 삭제한다
@@ -116,5 +116,5 @@ func (s *commentService) DeleteComment(req *resource.DeleteCommentRequest) (err 
 	}
 
 	// 3. 리턴
-	return nil
+	return
 }

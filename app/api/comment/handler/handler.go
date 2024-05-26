@@ -31,27 +31,27 @@ func NewCommentHandler() handler {
 	}
 }
 
-// [혈서 목록 조회] query : EventId
+// [혈서 목록 조회] query : Id
 func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
 	// 1. id값 받아오기
 	req := new(resource.FindAllCommentRequest)
 	idByParam := ctx.C.Params("id")
-	req.EventId, err = strconv.Atoi(idByParam)
+	req.Id, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
 
 	// 2. 서비스 함수 실행
-	res, err := h.service.FindAllComment(req.EventId)
+	res, err := h.service.FindAllComment(req.Id)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
 	return ctx.HttpOK(res)
 }
 
-// [혈서 등록] query : EventId, body : UserId, Content
+// [혈서 등록] query : Id, body : UserId, Content
 func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -61,9 +61,9 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
 
-	// 1. eventId값 받아오기
+	// 1. Id값 받아오기
 	idByParam := ctx.C.Params("id")
-	req.EventId, err = strconv.Atoi(idByParam)
+	req.Id, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
@@ -79,7 +79,7 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(err)
 }
 
-// [혈서 수정] query : EventId, body : UserId, Content
+// [혈서 수정] query : Id, body : Id, Content
 func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -89,9 +89,9 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
 
-	// 1. eventId값 받아오기
+	// 1. Id값 받아오기
 	idByParam := ctx.C.Params("id")
-	req.EventId, err = strconv.Atoi(idByParam)
+	req.Id, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
@@ -107,21 +107,21 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(err)
 }
 
-// [혈서 삭제] query : EventId, body : UserId
+// [혈서 삭제] query : Id, body : Id
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
 	req := new(resource.DeleteCommentRequest)
 	ctx.C.BodyParser(req)
 
-	// 1. eventId값 받아오기
+	// 1. Id값 받아오기
 	idByParam := ctx.C.Params("id")
-	req.EventId, err = strconv.Atoi(idByParam)
+	req.Id, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
 
-	// 2. userId값 받아오기
+	// 2. Id값 받아오기
 	req.UserId = ctx.GetLocalsInt("user_id")
 
 	// 3. 서비스 함수 실행
