@@ -1,4 +1,4 @@
-package patient
+package dex
 
 import (
 	"main/app/api/patient/handler"

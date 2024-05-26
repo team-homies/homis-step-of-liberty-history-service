@@ -5,7 +5,8 @@ import (
 	"main/app"
 	"main/config"
 	"main/database"
-	"net"`
+	"net"
+
 
 	"github.com/spf13/viper"
 )
@@ -31,7 +32,7 @@ func main() {
 	listen, err := net.Listen("tcp", viper.GetString(config.APP_GRPC_PORT))
 	if err != nil {
 		log.Fatalf("grpc 포트 에러: %v", err)
-	}
+	} 
 
 	// gRPC 초기화
 	grpcServer := app.InitGrpc()
