@@ -1,8 +1,8 @@
 package resource
 
 type FindAllCommentRequest struct {
-	// 라우터에 포함될 Id Param
-	Id int `json:"id" param:"id"`
+	// 라우터에 포함될 EventId Param
+	EventId int `json:"event_id" param:"id"`
 }
 
 type CreateCommentRequest struct {

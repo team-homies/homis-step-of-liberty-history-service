@@ -31,20 +31,20 @@ func NewCommentHandler() handler {
 	}
 }
 
-// [혈서 목록 조회] Param : Id
+// [혈서 목록 조회] Param : Id (eventId값)
 func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
 	// 1. id값 받아오기
 	req := new(resource.FindAllCommentRequest)
 	idByParam := ctx.C.Params("id")
-	req.Id, err = strconv.Atoi(idByParam)
+	req.EventId, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
 
 	// 2. 서비스 함수 실행
-	res, err := h.service.FindAllComment(req.Id)
+	res, err := h.service.FindAllComment(req.EventId)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}

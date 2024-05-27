@@ -29,7 +29,7 @@ type commentService struct {
 	CommentService
 }
 
-// [혈서 목록 조회] Param : EventId
+// [혈서 목록 조회] Param : Id (eventId값)
 func (s *commentService) FindAllComment(eventId int) (res []resource.FindAllCommentResponse, err error) {
 	commentRepository := repository.NewRepository()
 	res = []resource.FindAllCommentResponse{}

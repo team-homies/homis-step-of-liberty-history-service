@@ -8,7 +8,7 @@ import (
 
 // Comment 레포지토리 인터페이스
 type CommentRepository interface {
-	FindAll(Id int) (result []entity.Comment, err error)
+	FindAll(eventId int) (result []entity.Comment, err error)
 	Create(comment *entity.Comment) (err error)
 	Update(comment *entity.Comment) (err error)
 	Delete(comment *entity.Comment) (err error)
@@ -22,14 +22,14 @@ func NewCommentRepository(db *gorm.DB) CommentRepository {
 	return &gormCommentRepository{db}
 }
 
-// [혈서 목록 조회] Param : Id
-func (g *gormCommentRepository) FindAll(Id int) (result []entity.Comment, err error) {
+// [혈서 목록 조회] Param : Id (eventId값)
+func (g *gormCommentRepository) FindAll(eventId int) (result []entity.Comment, err error) {
 	// 1. 쿼리 작성
 	// select (id, event_id, user_id, content) from comment
 
 	// 2. gorm 적용
 	tx := g.db
-	err = tx.Model(&entity.Comment{}).Select("user_id", "content").Where("id = ?", Id).Find(&result).Error
+	err = tx.Model(&entity.Comment{}).Select("user_id", "content").Where("event_id = ?", eventId).Find(&result).Error
 	if err != nil {
 		return
 	}
