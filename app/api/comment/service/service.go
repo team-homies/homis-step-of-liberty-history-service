@@ -57,9 +57,7 @@ func (s *commentService) CreateComment(req *resource.CreateCommentRequest) (err 
 
 	// 1. 받아온 parameter들을 변수에 저장한다
 	commentCreate := entity.Comment{
-		Model: gorm.Model{
-			ID: uint(req.Id),
-		},
+		EventId: req.EventId,
 		UserId:  req.UserId,
 		Content: req.Content,
 	}

@@ -6,8 +6,8 @@ type FindAllCommentRequest struct {
 }
 
 type CreateCommentRequest struct {
-	// 라우터에 포함될 Id Param
-	Id int `json:"d" param:"id"`
+	// 라우터에 포함될 EventId Param
+	EventId int `json:"event_id" param:"id"`
 	// 등록할 UserId와 Content body
 	UserId  int    `json:"user_id"`
 	Content string `json:"content"`

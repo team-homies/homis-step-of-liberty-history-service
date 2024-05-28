@@ -31,7 +31,7 @@ func NewCommentHandler() handler {
 	}
 }
 
-// [혈서 목록 조회] Param : Id (eventId값)
+// [혈서 목록 조회] Param : eventId
 func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -51,7 +51,7 @@ func (h *commentHandler) FindAllComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(res)
 }
 
-// [혈서 등록] Param : Id, body : UserId, Content
+// [혈서 등록] Param : eventId, body : UserId, Content
 func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -63,7 +63,7 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 
 	// 1. Id값 받아오기
 	idByParam := ctx.C.Params("id")
-	req.Id, err = strconv.Atoi(idByParam)
+	req.EventId, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
