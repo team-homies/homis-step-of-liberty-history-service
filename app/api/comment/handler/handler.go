@@ -107,7 +107,7 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(err)
 }
 
-// [혈서 삭제] Param : Id, body : Id
+// [혈서 삭제] Param : eventId, body : Id
 func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -116,7 +116,7 @@ func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 
 	// 1. Id값 받아오기
 	idByParam := ctx.C.Params("id")
-	req.Id, err = strconv.Atoi(idByParam)
+	req.EventId, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}

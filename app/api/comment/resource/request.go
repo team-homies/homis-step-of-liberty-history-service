@@ -14,18 +14,18 @@ type CreateCommentRequest struct {
 }
 
 type UpdateCommentRequest struct {
+	Id int `json:"id"`
 	// 라우터에 포함될 Id Param
-	Id      int `json:"id" param:"id"`
-	EventId int `json:"event_id"`
+	EventId int `json:"event_id" param:"id"`
 	// 수정할 UserId와 Content body
 	UserId  int    `json:"user_id"`
 	Content string `json:"content"`
 }
 
 type DeleteCommentRequest struct {
+	Id int `json:"id"`
 	// 라우터에 포함될 Id Param
-	Id      int `json:"id" param:"id"`
-	EventId int `json:"event_id"`
+	EventId int `json:"event_id" param:"id"`
 	// 삭제할 UserId body
 	UserId int `json:"user_id"`
 }

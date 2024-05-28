@@ -77,17 +77,19 @@ func (s *commentService) UpdateComment(req *resource.UpdateCommentRequest) (err 
 	commentRepository := repository.NewRepository()
 
 	// 1. 받아온 parameter들을 변수에 저장한다
-	var comment entity.Comment
-	comment.EventId = req.EventId
+	commentUpdate := entity.Comment{
+		EventId: req.EventId,
+		UserId:  req.UserId,
+	}
 	if req.Id != 0 {
-		comment.Model.ID = uint(req.Id)
+		commentUpdate.Model.ID = uint(req.Id)
 	}
 	if req.Content != "" {
-		comment.Content = req.Content
+		commentUpdate.Content = req.Content
 	}
 
 	// 2. 만들어진 레포지토리를 사용해서 데이터를 수정
-	err = commentRepository.Update(&comment)
+	err = commentRepository.Update(&commentUpdate)
 	if err != nil {
 		return
 	}
@@ -96,12 +98,14 @@ func (s *commentService) UpdateComment(req *resource.UpdateCommentRequest) (err 
 	return
 }
 
-// [혈서 삭제] Param : Id, body : Id
+// [혈서 삭제] Param : eventId, body : Id
 func (s *commentService) DeleteComment(req *resource.DeleteCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
 	// 1. 받아온 parameter들을 변수에 저장한다
 	commentDelete := entity.Comment{
+		EventId: req.EventId,
+		UserId:  req.UserId,
 		Model: gorm.Model{
 			ID: uint(req.Id),
 		},
