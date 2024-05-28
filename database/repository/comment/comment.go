@@ -58,7 +58,7 @@ func (g *gormCommentRepository) Update(comment *entity.Comment) (err error) {
 	// 1. 쿼리 작성
 	// update "comment"
 	//    set content = '수정내용'
-	//  where content is not null;
+	//  where id = 8;
 
 	// 2. gorm 적용
 	tx := g.db.Begin()

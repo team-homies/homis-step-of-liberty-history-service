@@ -11,10 +11,10 @@ import (
 
 // 핸들러 인터페이스 선언 (메소드와 반환형 기재)
 type handler interface {
-	FindAllComment(c *fiber.Ctx) (err error)
-	CreateComment(c *fiber.Ctx) (err error)
-	UpdateComment(c *fiber.Ctx) (err error)
-	DeleteComment(c *fiber.Ctx) (err error)
+	FindAllComment(c *fiber.Ctx) error
+	CreateComment(c *fiber.Ctx) error
+	UpdateComment(c *fiber.Ctx) error
+	DeleteComment(c *fiber.Ctx) error
 }
 
 // commentHandler형 선언
@@ -79,7 +79,7 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(err)
 }
 
-// [혈서 수정] Param : Id, body : Id, Content
+// [혈서 수정] Param : eventId, body : Id, Content
 func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 
@@ -91,7 +91,7 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 
 	// 1. Id값 받아오기
 	idByParam := ctx.C.Params("id")
-	req.Id, err = strconv.Atoi(idByParam)
+	req.EventId, err = strconv.Atoi(idByParam)
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}

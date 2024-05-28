@@ -72,13 +72,13 @@ func (s *commentService) CreateComment(req *resource.CreateCommentRequest) (err 
 	return
 }
 
-// [혈서 수정] Param : Id, body : Id, Content
+// [혈서 수정] Param : eventId, body : Id, Content
 func (s *commentService) UpdateComment(req *resource.UpdateCommentRequest) (err error) {
 	commentRepository := repository.NewRepository()
 
 	// 1. 받아온 parameter들을 변수에 저장한다
 	var comment entity.Comment
-	comment.Model.ID = uint(req.Id)
+	comment.EventId = req.EventId
 	if req.Id != 0 {
 		comment.Model.ID = uint(req.Id)
 	}
