@@ -16,4 +16,8 @@ type CommentPath struct {
 type DexEventPath struct {
 	FindDexEvent   string
 	CreateDexEvent string
+	FindAllComment string
+	CreateComment  string
+	UpdateComment  string
+	DeleteComment  string
 }
