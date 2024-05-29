@@ -8,6 +8,7 @@ import (
 
 type DexRepository interface {
 	FindQuote(Id uint) (quote *entity.Quote, err error)
+	GetTags() (result []entity.Tag, err error)
 }
 
 type gormDexRepository struct {
@@ -25,4 +26,13 @@ func (g *gormDexRepository) FindQuote(Id uint) (quote *entity.Quote, err error) 
 	tx := g.db.Where("id = ?", Id).Find(&quote)
 
 	return quote, tx.Error
+}
+func (g *gormDexRepository) GetTags() (result []entity.Tag, err error) {
+	// select "id", name
+	// from tag t;
+
+	tx := g.db.Select("id", "name").Find(&result)
+
+	return result, tx.Error
+
 }

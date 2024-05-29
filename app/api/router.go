@@ -1,12 +1,12 @@
 package api
 
 import (
-	"main/app/api/patient"
+	"main/app/api/dex"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func InitRoutes(app *fiber.App) {
 	dexGroup := app.Group("")
-	patient.SetDexApis(dexGroup)
+	dex.SetDexApis(dexGroup)
 }

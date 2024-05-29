@@ -7,6 +7,7 @@ import (
 
 type DexService interface {
 	GetQuote() (res *resource.GetQuoteResponse, err error)
+	GetTags() (res []resource.GetTagsResponse, err error)
 }
 
 func NewDexService() DexService {
@@ -26,12 +27,24 @@ func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
 	if err != nil {
 		return
 	}
-
 	res = &resource.GetQuoteResponse{
 		Content:  quote.Content,
 		ImageUrl: quote.ImageUrl,
 	}
 	return
 }
+func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
+	res = []resource.GetTagsResponse{}
+	tags, err := repository.NewRepository().GetTags()
+	if err != nil {
+		return
+	}
 
-
+	for _, tag := range tags {
+		res = append(res, resource.GetTagsResponse{
+			Id:   tag.ID,
+			Name: tag.Name,
+		})
+	}
+	return res, err
+}
