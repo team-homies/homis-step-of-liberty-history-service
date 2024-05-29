@@ -3,12 +3,19 @@ package dex
 import (
 	"context"
 	"main/app/grpc/proto/dex"
+	"main/database/repository"
+	"strconv"
 
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type server struct {
 	dex.DexEventServiceServer
+}
+
+func RegisterDosageService(grpcServer *grpc.Server) {
+	dex.RegisterDexEventServiceServer(grpcServer, &server{})
 }
 
 // proto에서 정의한 함수명과 동일하게 할 것
@@ -30,6 +37,21 @@ func (s *server) GetDexById(ctx context.Context, in *dex.DexEventRequest) (*dex.
 	}, nil
 }
 
-func RegisterDosageService(grpcServer *grpc.Server) {
-	dex.RegisterDexEventServiceServer(grpcServer, &server{})
+func (s *server) GetRate(ctx context.Context, in *emptypb.Empty) (*dex.RateResponse, error) {
+	// 1. CountEvents 가져오고
+	e, err := repository.NewRepository().CountEvents()
+	if err != nil {
+		return nil, err
+	}
+	// 2. CountUserEvents 가져와서
+	u, err := repository.NewRepository().CountUserEvents()
+	if err != nil {
+		return nil, err
+	}
+	// 3. CountEvents * CountUserEvents / 100
+	var rate float64 = float64(u) / float64(e) * 100
+
+	return &dex.RateResponse{
+		Rate: strconv.FormatFloat(rate, 'f', -1, 64),
+	}, err
 }

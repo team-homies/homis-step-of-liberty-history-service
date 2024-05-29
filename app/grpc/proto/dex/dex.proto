@@ -34,6 +34,6 @@ service DexEventService {
   }
   
 message RateResponse{
-    int64 Rate = 1;
+    string Rate = 1;
 }
 

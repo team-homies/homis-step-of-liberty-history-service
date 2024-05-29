@@ -13,6 +13,7 @@ type DexRepository interface {
 	FindUserDexById(eventId int, userId int) (res int, err error)
 	CreateUserDexById(eventId int, userId int) (err error)
 	CountEvents() (count int64, err error)
+	CountUserEvents() (count int64, err error)
 }
 
 type gormDexRepository struct {
