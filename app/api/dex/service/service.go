@@ -20,19 +20,6 @@ type dexService struct {
 	DexService
 }
 
-func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
-	var Id uint
-
-	quote, err := repository.NewRepository().FindQuote(Id)
-	if err != nil {
-		return
-	}
-	res = &resource.GetQuoteResponse{
-		Content:  quote.Content,
-		ImageUrl: quote.ImageUrl,
-	}
-	return
-}
 func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
 	res = []resource.GetTagsResponse{}
 	tags, err := repository.NewRepository().GetTags()
@@ -47,4 +34,16 @@ func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
 		})
 	}
 	return res, err
+}
+
+func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
+	quote, err := repository.NewRepository().GetQuote()
+	if err != nil {
+		return
+	}
+	res = &resource.GetQuoteResponse{
+		Content:  quote.Content,
+		ImageUrl: quote.ImageUrl,
+	}
+	return
 }
