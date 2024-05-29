@@ -15,5 +15,5 @@ func SetDexApis(route fiber.Router) {
 	// 사건 내용 조회
 	route.Get(constant.DexPath().DexEvent.FindDexEvent, h.FindDexEvent)
 	// 사용자 사건 수집 등록
-	route.Post(constant.DexPath().DexEvent.CreateDexEvent, middleware.JWTMiddleware, h.CreateDexEvent)
+	route.Post(constant.DexPath().DexEvent.CreateDexEvent, middleware.AuthVerificationMiddleware, h.CreateDexEvent)
 }
