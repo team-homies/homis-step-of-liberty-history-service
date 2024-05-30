@@ -15,8 +15,6 @@ var DB *gorm.DB
 
 // Read Write : create, update, delete
 // Read Only : select
-// Read Write : create, update, delete
-// Read Only : select
 type DBConfig struct {
 	RwDSN string
 	RoDSN string

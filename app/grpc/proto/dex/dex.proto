@@ -1,14 +1,13 @@
 syntax = "proto3";
 // protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dex.proto
 
-import "google/protobuf/empty.proto";
 package grpc;
 option go_package= "main/app/grpc/proto/dex";
 
-// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./app/grpc/proto/dex/dex.proto (왱구가 안써놓음 지만하려고)
+// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./app/grpc/proto/dex/dex.proto
 service DexEventService {
     rpc FindDexEvent (DexEventRequest) returns (DexEventResponse) {}
-    rpc GetRate (google.protobuf.Empty) returns (RateResponse) {}
+    rpc GetRate (RateRequest) returns (RateResponse) {}
   }
   
   message DexEventRequest {
@@ -32,7 +31,10 @@ service DexEventService {
       string Background = 4;
       string ImageUrl = 5;
   }
-  
+
+message RateRequest{
+    uint64 UserId = 1;
+}
 message RateResponse{
     string Rate = 1;
 }

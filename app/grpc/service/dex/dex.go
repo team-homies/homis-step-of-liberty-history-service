@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type server struct {
@@ -37,18 +36,22 @@ func (s *server) GetDexById(ctx context.Context, in *dex.DexEventRequest) (*dex.
 	}, nil
 }
 
-func (s *server) GetRate(ctx context.Context, in *emptypb.Empty) (*dex.RateResponse, error) {
+func (s *server) GetRate(ctx context.Context, in *dex.RateRequest) (*dex.RateResponse, error) {
 	// 1. CountEvents 가져오고
 	e, err := repository.NewRepository().CountEvents()
 	if err != nil {
 		return nil, err
 	}
 	// 2. CountUserEvents 가져와서
-	u, err := repository.NewRepository().CountUserEvents()
+	u, err := repository.NewRepository().CountUserEvents(in.UserId)
 	if err != nil {
 		return nil, err
 	}
-	// 3. CountEvents * CountUserEvents / 100
+	// u가 0일 때 그.. rate 계산이 안됨
+	if u == 0 {
+		return &dex.RateResponse{Rate: "0"}, err
+	}
+	// 3. CountUserEvents / CountEvents * 100
 	var rate float64 = float64(u) / float64(e) * 100
 
 	return &dex.RateResponse{
