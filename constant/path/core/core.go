@@ -7,10 +7,10 @@ type InternalApi struct {
 }
 
 type CommentPath struct {
-	GetAllComment string
-	CreateComment string
-	UpdateComment string
-	DeleteComment string
+	FindAllComment string
+	CreateComment  string
+	UpdateComment  string
+	DeleteComment  string
 }
 
 type DexEventPath struct {

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v5.26.1
-// source: dex.proto
+// source: app/grpc/proto/dex/dex.proto
 
 package dex
 
@@ -46,7 +46,7 @@ func (c *dexEventServiceClient) FindDexEvent(ctx context.Context, in *DexEventRe
 // All implementations must embed UnimplementedDexEventServiceServer
 // for forward compatibility
 type DexEventServiceServer interface {
-FindDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error)
+	FindDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error)
 	mustEmbedUnimplementedDexEventServiceServer()
 }
 
@@ -101,5 +101,5 @@ var DexEventService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "dex.proto",
+	Metadata: "app/grpc/proto/dex/dex.proto",
 }

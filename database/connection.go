@@ -15,6 +15,8 @@ var DB *gorm.DB
 
 // Read Write : create, update, delete
 // Read Only : select
+// Read Write : create, update, delete
+// Read Only : select
 type DBConfig struct {
 	RwDSN string
 	RoDSN string
@@ -28,6 +30,7 @@ func InitDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	// err값이 null이면 RO 연동 성공
 	err = db.Use(dbresolver.Register(dbresolver.Config{
 		// 레플리카 read only
