@@ -1,11 +1,11 @@
 syntax = "proto3";
-// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dex.proto
+// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./app/grpc/proto/dex/dex.proto
 
 package grpc;
 option go_package= "main/app/grpc/proto/dex";
 
 service DexEventService {
-    rpc GetDexEvent (DexEventRequest) returns (DexEventResponse) {}
+    rpc FindDexEvent (DexEventRequest) returns (DexEventResponse) {}
   }
   
   message DexEventRequest {
@@ -23,11 +23,10 @@ service DexEventService {
   }
   
   message Detail {
-      string DetailId = 1;
-      string Define = 2;
-      string Outline = 3;
-      string Place = 4;
-      string Background = 5;
-      string ImageUrl = 6;
+      string Define = 1;
+      string Outline = 2;
+      string Place = 3;
+      string Background = 4;
+      string ImageUrl = 5;
   }
   
