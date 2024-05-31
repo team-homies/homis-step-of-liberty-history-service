@@ -9,7 +9,7 @@ service DexEventService {
   }
   
   message DexEventRequest {
-      int64  Id = 1;
+      int64  EventId = 1;
   }
   
   message DexEventResponse {
