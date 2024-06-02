@@ -13,11 +13,16 @@ import (
 
 var DB *gorm.DB
 
+// Read Write : create, update, delete
+// Read Only : select
+// Read Write : create, update, delete
+// Read Only : select
 type DBConfig struct {
 	RwDSN string
 	RoDSN string
 }
 
+// postgres 연동
 func InitDB() (*gorm.DB, error) {
 	dns := generateDialector()
 	db, err := gorm.Open(postgres.Open(dns.RwDSN), &gorm.Config{})
@@ -26,9 +31,12 @@ func InitDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
+	// err값이 null이면 RO 연동 성공
 	err = db.Use(dbresolver.Register(dbresolver.Config{
+		// 레플리카 read only
 		Replicas: []gorm.Dialector{postgres.Open(dns.RoDSN)},
-		Policy:   dbresolver.RandomPolicy{},
+		// 정책 설정
+		Policy: dbresolver.RandomPolicy{},
 	}).SetMaxOpenConns(50).SetMaxIdleConns(10))
 	if err != nil {
 		return nil, err
