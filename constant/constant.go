@@ -10,18 +10,30 @@ var (
 	once     sync.Once
 )
 
-func DexPath() *core.InternalApi {
+// 라우터 path 함수
+func CommentPath() *core.InternalApi {
 	once.Do(func() {
 		instance = &core.InternalApi{
-			DexEvent: core.DexEventPath{
-				FindAllComment: "",
-				CreateComment:  "",
-				UpdateComment:  "",
-				DeleteComment:  "",
-				FindDexEvent:   "/history/:id",
-				CreateDexEvent: "/history",
+			Comment: core.CommentPath{
+				FindAllComment: "/:id/comments",
+				CreateComment:  "/:id/comments",
+				UpdateComment:  "/:id/comments",
+				DeleteComment:  "/:id/comments",
 			},
 		}
 	})
+	return instance
+}
+func DexPath() *core.InternalApi {
+	once.Do(func() {
+		instance = &core.InternalApi{
+			Dex: core.DexPath{
+				FindDexEvent:   "/history/:id",
+				CreateDexEvent: "/history",
+				GetTags:        "/tags",
+			},
+		}
+	})
+
 	return instance
 }

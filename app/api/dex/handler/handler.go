@@ -12,20 +12,21 @@ import (
 type handler interface {
 	CreateDexEvent(c *fiber.Ctx) error
 	FindDexEvent(c *fiber.Ctx) error
+	GetTags(c *fiber.Ctx) error
 }
 
-type dexEventHandler struct {
-	service service.DexEventService
+type dexHandler struct {
+	service service.DexService
 }
 
 func NewDexHandler() handler {
-	return &dexEventHandler{
-		service: service.NewDexEventService(),
+	return &dexHandler{
+		service: service.NewDexService(),
 	}
 }
 
 // [사용자 사건 수집 등록] 사건 id로 등록 post문 : 핸들러
-func (h *dexEventHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
+func (h *dexHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 	// 1. id값 받아오기
 	req := new(resource.CreateEventRequest)
@@ -43,7 +44,7 @@ func (h *dexEventHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
 }
 
 // [사건 내용 조회] 사건 id로 조회 : 핸들러
-func (h *dexEventHandler) FindDexEvent(c *fiber.Ctx) (err error) {
+func (h *dexHandler) FindDexEvent(c *fiber.Ctx) (err error) {
 	ctx := fiberkit.FiberKit{C: c}
 	// 1. id값 받아오기
 	req := new(resource.FindEventRequest)
@@ -59,5 +60,15 @@ func (h *dexEventHandler) FindDexEvent(c *fiber.Ctx) (err error) {
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
+	return ctx.HttpOK(res)
+}
+
+func (h *dexHandler) GetTags(c *fiber.Ctx) error {
+	ctx := fiberkit.FiberKit{C: c}
+	res, err := h.service.GetTags()
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
+
 	return ctx.HttpOK(res)
 }
