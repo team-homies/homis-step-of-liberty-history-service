@@ -30,12 +30,13 @@ func CommentPath() *core.InternalApi {
 func DexPath() *core.InternalApi {
 	// Do함수는 인스턴스가 있으면 실행X
 	once.Do(func() {
-		instance = &core.InternalApi{}
+		instance = &core.InternalApi{
 			Dex: core.DexPath{
-				GetTags: "/tags",
 				FindDexEvent:   "/history/:id",
 				CreateDexEvent: "/history",
-			},		
+				GetTags:        "/tags",
+			},
+		}
 	})
 
 	return instance

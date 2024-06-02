@@ -20,8 +20,9 @@ func NewDexService() DexService {
 type dexService struct {
 	DexService
 }
+
 // [사용자 사건 수집 등록] 사건 id로 등록 post문 : 서비스
-func (s *dexEventService) CreateUserDex(req *resource.CreateEventRequest) (err error) {
+func (s *dexService) CreateUserDex(req *resource.CreateEventRequest) (err error) {
 	dexReposiroty := repository.NewRepository()
 	// 1. userId와 dexId가 일치하는 값 참거짓 구분
 	countDex, err := dexReposiroty.FindUserDexById(req.EventId, req.UserId)
@@ -40,7 +41,7 @@ func (s *dexEventService) CreateUserDex(req *resource.CreateEventRequest) (err e
 }
 
 // [사건 내용 조회] 사건 id로 조회 : 서비스
-func (d *dexEventService) FindDexEvent(id int) (res *resource.FindEventResponse, err error) {
+func (d *dexService) FindDexEvent(id int) (res *resource.FindEventResponse, err error) {
 	dexReposiroty := repository.NewRepository()
 
 	res = new(resource.FindEventResponse)
