@@ -2,6 +2,7 @@ package util
 
 import "encoding/json"
 
+// Struct를 맵으로 변환하는 함수
 func StructToMap(data any) (result map[string]any, err error) {
 	result = make(map[string]any)
 

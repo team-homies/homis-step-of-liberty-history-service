@@ -1,12 +1,15 @@
 package api
 
 import (
-	"main/app/api/dex"
+	"main/app/api/comment"
+	dex "main/app/api/dex"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func InitRoutes(app *fiber.App) {
-	dexGroup := app.Group("")
-	dex.SetDexApis(dexGroup)
+	dexApi := app.Group("")
+	dex.SetDexApis(dexApi)
+	commentGroup := app.Group("/history")
+	comment.SetCommentApis(commentGroup)
 }
