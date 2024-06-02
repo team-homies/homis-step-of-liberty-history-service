@@ -2,8 +2,8 @@
 package core
 
 type InternalApi struct {
-	Comment  CommentPath
-	DexEvent DexEventPath
+	Comment CommentPath
+	Dex     DexPath
 }
 
 type CommentPath struct {
@@ -13,7 +13,8 @@ type CommentPath struct {
 	DeleteComment  string
 }
 
-type DexEventPath struct {
+type DexPath struct {
 	FindDexEvent   string
 	CreateDexEvent string
+	GetTags        string
 }

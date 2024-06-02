@@ -15,9 +15,9 @@ func SetCommentApis(route fiber.Router) {
 	// 혈서 목록 조회
 	route.Get(constant.CommentPath().Comment.FindAllComment, h.FindAllComment)
 	// 혈서 등록
-	route.Post(constant.CommentPath().Comment.CreateComment, middleware.JWTMiddleware, h.CreateComment)
+	route.Post(constant.CommentPath().Comment.CreateComment, middleware.AuthVerificationMiddleware, h.CreateComment)
 	// 혈서 수정
-	route.Put(constant.CommentPath().Comment.UpdateComment, middleware.JWTMiddleware, h.UpdateComment)
+	route.Put(constant.CommentPath().Comment.UpdateComment, middleware.AuthVerificationMiddleware, h.UpdateComment)
 	// 혈서 제거
-	route.Delete(constant.CommentPath().Comment.DeleteComment, middleware.JWTMiddleware, h.DeleteComment)
+	route.Delete(constant.CommentPath().Comment.DeleteComment, middleware.AuthVerificationMiddleware, h.DeleteComment)
 }

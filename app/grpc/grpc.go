@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"main/app/grpc/service/dex"
+	dex "main/app/grpc/service/dex"
 
 	"google.golang.org/grpc"
 )
