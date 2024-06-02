@@ -11,4 +11,6 @@ func SetDexApis(route fiber.Router) {
 	h := handler.NewDexHandler()
 	// 도감 필터 조회
 	route.Get(constant.GetPath().Dex.GetTags, h.GetTags)
+	// 명언 조회
+	route.Get(constant.GetPath().Dex.GetQuote, h.GetQuote)
 }

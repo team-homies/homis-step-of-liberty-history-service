@@ -14,7 +14,8 @@ func GetPath() *core.InternalApi {
 	once.Do(func() {
 		instance = &core.InternalApi{
 			Dex: core.DexPath{
-				GetTags: "/tags",
+				GetTags:  "/tags",
+				GetQuote: "/quotes",
 			},
 		}
 	})

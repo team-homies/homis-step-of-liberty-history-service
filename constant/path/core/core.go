@@ -6,5 +6,6 @@ type InternalApi struct {
 }
 
 type DexPath struct {
-	GetTags string
+	GetTags  string
+	GetQuote string
 }

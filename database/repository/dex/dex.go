@@ -7,7 +7,7 @@ import (
 )
 
 type DexRepository interface {
-	GetQuote() (quote *entity.Quote, err error)
+	GetQuote() (quote []entity.Quote, err error)
 	GetTags() (result []entity.Tag, err error)
 }
 
@@ -19,9 +19,10 @@ func NewDexRepository(db *gorm.DB) DexRepository {
 	return &gormDexRepository{db}
 }
 
+// 태그 목록 조회
 func (g *gormDexRepository) GetTags() (result []entity.Tag, err error) {
 	// select "id", name
-	// from tag t;
+	//   from tag t;
 
 	tx := g.db.Select("id", "name").Find(&result)
 
@@ -29,8 +30,8 @@ func (g *gormDexRepository) GetTags() (result []entity.Tag, err error) {
 
 }
 
-// 명언 전체
-func (g *gormDexRepository) GetQuote() (quote *entity.Quote, err error) {
+// 명언 전체 조회
+func (g *gormDexRepository) GetQuote() (quote []entity.Quote, err error) {
 	// 	select *
 	//    from "quote" q
 	err = g.db.Find(&quote).Error
