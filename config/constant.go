@@ -12,4 +12,8 @@ const (
 	DATABASE_RW_PASSWORD = "database.rw.password"
 	DATABASE_RO_USER     = "database.ro.user"
 	DATABASE_RO_PASSWORD = "database.ro.password"
+	GRPC_AUTH_PORT       = "grpc.auth.port"
+	GRPC_AUTH_HOST       = "grpc.auth.host"
+	GRPC_MAP_PORT        = "grpc.map.port"
+	GRPC_MAP_HOST        = "grpc.map.port"
 )

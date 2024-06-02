@@ -13,6 +13,8 @@ type DexRepository interface {
 	FindUserDexById(eventId int, userId int) (res int, err error)
 	CreateUserDexById(eventId int, userId int) (err error)
 	GetTags() (result []entity.Tag, err error)
+	CountEvents() (count int64, err error)
+	CountUserEvents(userId uint64) (count int64, err error)
 }
 
 type gormDexRepository struct {
@@ -100,4 +102,25 @@ func (g *gormDexRepository) GetTags() (result []entity.Tag, err error) {
 
 	return result, tx.Error
 
+}
+
+// 전체 사건의 개수
+func (g *gormDexRepository) CountEvents() (count int64, err error) {
+	// 	select count(*)
+	//    from "event" e
+	//   where is_used = true ;
+	err = g.db.Model(&entity.Event{}).Where("is_used = true").Count(&count).Error
+
+	return
+}
+
+// 유저 사건의 전체 개수
+func (g *gormDexRepository) CountUserEvents(userId uint64) (count int64, err error) {
+	// select count(*)
+	//   from userdex u
+	//  where user_id = 1
+	// 	  and deleted_at is null ;
+	err = g.db.Model(&entity.UserDex{}).Where("user_id = ? AND deleted_at is null", userId).Count(&count).Error
+
+	return
 }

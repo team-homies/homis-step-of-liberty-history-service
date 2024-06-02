@@ -3,6 +3,8 @@ package dex
 import (
 	"context"
 	"main/app/grpc/proto/dex"
+	"main/database/repository"
+	"strconv"
 
 	"google.golang.org/grpc"
 )
@@ -19,7 +21,6 @@ func RegisterDosageService(grpcServer *grpc.Server) {
 func (s *server) GetDexById(ctx context.Context, in *dex.DexEventRequest) (*dex.DexEventResponse, error) {
 	// 서비스 함수 실행 or 로직 구현
 	return &dex.DexEventResponse{
-		EventId: in.GetId(),
 		Name:    "3.1운동",
 		Level:   "24",
 		Created: "2024-05-01",
@@ -33,4 +34,27 @@ func (s *server) GetDexById(ctx context.Context, in *dex.DexEventRequest) (*dex.
 			ImageUrl:   "image.url",
 		},
 	}, nil
+}
+
+func (s *server) GetRate(ctx context.Context, in *dex.RateRequest) (*dex.RateResponse, error) {
+	// 1. CountEvents 가져오고
+	e, err := repository.NewRepository().CountEvents()
+	if err != nil {
+		return nil, err
+	}
+	// 2. CountUserEvents 가져와서
+	u, err := repository.NewRepository().CountUserEvents(in.UserId)
+	if err != nil {
+		return nil, err
+	}
+	// u가 0일 때 그.. rate 계산이 안됨
+	if u == 0 {
+		return &dex.RateResponse{Rate: "0"}, err
+	}
+	// 3. CountUserEvents / CountEvents * 100
+	var rate float64 = float64(u) / float64(e) * 100
+
+	return &dex.RateResponse{
+		Rate: strconv.FormatFloat(rate, 'f', -1, 64),
+	}, err
 }
