@@ -5,23 +5,24 @@ import (
 	"main/database/repository"
 )
 
-type DexEventService interface {
+type DexService interface {
+	GetTags() (res []resource.GetTagsResponse, err error)
 	FindDexEvent(id int) (res *resource.FindEventResponse, err error)
 	CreateUserDex(req *resource.CreateEventRequest) (err error)
 }
 
-func NewDexEventService() DexEventService {
-	return &dexEventService{
-		DexEventService: &dexEventService{},
+func NewDexService() DexService {
+	return &dexService{
+		DexService: &dexService{},
 	}
 }
 
-type dexEventService struct {
-	DexEventService
+type dexService struct {
+	DexService
 }
 
 // [사용자 사건 수집 등록] 사건 id로 등록 post문 : 서비스
-func (s *dexEventService) CreateUserDex(req *resource.CreateEventRequest) (err error) {
+func (s *dexService) CreateUserDex(req *resource.CreateEventRequest) (err error) {
 	dexReposiroty := repository.NewRepository()
 	// 1. userId와 dexId가 일치하는 값 참거짓 구분
 	countDex, err := dexReposiroty.FindUserDexById(req.EventId, req.UserId)
@@ -40,7 +41,7 @@ func (s *dexEventService) CreateUserDex(req *resource.CreateEventRequest) (err e
 }
 
 // [사건 내용 조회] 사건 id로 조회 : 서비스
-func (d *dexEventService) FindDexEvent(id int) (res *resource.FindEventResponse, err error) {
+func (d *dexService) FindDexEvent(id int) (res *resource.FindEventResponse, err error) {
 	dexReposiroty := repository.NewRepository()
 
 	res = new(resource.FindEventResponse)
@@ -71,4 +72,20 @@ func (d *dexEventService) FindDexEvent(id int) (res *resource.FindEventResponse,
 
 	// 3. 리턴한다
 	return res, nil
+}
+
+func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
+	res = []resource.GetTagsResponse{}
+	tags, err := repository.NewRepository().GetTags()
+	if err != nil {
+		return
+	}
+
+	for _, tag := range tags {
+		res = append(res, resource.GetTagsResponse{
+			Id:   tag.ID,
+			Name: tag.Name,
+		})
+	}
+	return res, err
 }

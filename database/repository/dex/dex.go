@@ -12,6 +12,7 @@ type DexRepository interface {
 	FindDexDetailById(id int) (res *entity.Detail, err error)
 	FindUserDexById(eventId int, userId int) (res int, err error)
 	CreateUserDexById(eventId int, userId int) (err error)
+	GetTags() (result []entity.Tag, err error)
 }
 
 type gormDexRepository struct {
@@ -89,4 +90,14 @@ func (g *gormDexRepository) CreateUserDexById(eventId int, userId int) (err erro
 	}
 	tx.Commit()
 	return
+}
+
+func (g *gormDexRepository) GetTags() (result []entity.Tag, err error) {
+	// select "id", name
+	// from tag t;
+
+	tx := g.db.Select("id", "name").Find(&result)
+
+	return result, tx.Error
+
 }

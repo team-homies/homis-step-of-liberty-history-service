@@ -13,7 +13,9 @@ func SetDexApis(route fiber.Router) {
 	h := handler.NewDexHandler()
 
 	// 사건 내용 조회
-	route.Get(constant.DexPath().DexEvent.FindDexEvent, h.FindDexEvent)
+	route.Get(constant.DexPath().Dex.FindDexEvent, h.FindDexEvent)
 	// 사용자 사건 수집 등록
-	route.Post(constant.DexPath().DexEvent.CreateDexEvent, middleware.JWTMiddleware, h.CreateDexEvent)
+	route.Post(constant.DexPath().Dex.CreateDexEvent, middleware.JWTMiddleware, h.CreateDexEvent)
+	// 도감 필터 조회
+	route.Get(constant.DexPath().Dex.GetTags, h.GetTags)
 }
