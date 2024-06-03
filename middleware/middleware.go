@@ -46,7 +46,7 @@ func AuthVerificationMiddleware(c *fiber.Ctx) error {
 	}
 
 	// 3-2. ischecked true면 locals에 id 저장
-	c.Locals(common.LOCALS_USER_ID, res.UserId)
+	c.Locals(common.LOCALS_USER_ID, int(res.UserId))
 	// 4. c.Next()
 	return c.Next()
 }

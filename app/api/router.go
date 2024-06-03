@@ -8,8 +8,8 @@ import (
 )
 
 func InitRoutes(app *fiber.App) {
-	dexApi := app.Group("")
-	dex.SetDexApis(dexApi)
 	commentGroup := app.Group("/history")
 	comment.SetCommentApis(commentGroup)
+	dexApi := app.Group("")
+	dex.SetDexApis(dexApi)
 }

@@ -1,6 +1,6 @@
 package resource
 
 type FindAllCommentResponse struct {
-	UserId  int    `json:"user_id"`
+	UserId  uint64 `json:"user_id"`
 	Content string `json:"content"`
 }
