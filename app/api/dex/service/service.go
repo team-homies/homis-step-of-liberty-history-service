@@ -97,7 +97,7 @@ func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
 // 명언 조회
 var quotesOrigin map[int]*resource.GetQuoteResponse
 var flag int
-var qow *resource.GetQuoteResponse
+var quoteOfTheWeek *resource.GetQuoteResponse
 
 // 명언 조회
 func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
@@ -106,8 +106,9 @@ func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
 	if err != nil {
 		return
 	}
-	now := time.Now() // Go Playground 에서는 항상 시각은 2009-11-10 23:00:00 +0000 UTC 에서 시작한다.
-	t := now.In(loc) // 그래서 서울 기준 UTC 세팅(+0900)
+	// now := time.Now() // Go Playground 에서는 항상 시각은 2009-11-10 23:00:00 +0000 UTC 에서 시작한다.
+	// t := now.In(loc) // 그래서 서울 기준 UTC 세팅(+0900)
+	t := time.Now().In(loc)     //그래서 서울 기준 UTC 세팅(+0900)
 	weekDay := int(t.Weekday()) //일요일 : 0, 월요일 : 1
 	// 2. flag가 일요일 and weekDay가 월요일
 	if flag == 0 && weekDay == 1 {
@@ -127,30 +128,33 @@ func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
 					Content:  q.Content,
 					ImageUrl: q.ImageUrl,
 				}
-			} 
+			}
 		} else { // 4. 명언2(quotesOrigin)이 0이 아닐 때 명언1(quotes)에 명언2(quotesOrigin)넣기
 			quotes = quotesOrigin
 		}
 		// 5. quotes의 길이에서 랜덤으로 숫자 하나 rq에 담기
 		// 별도 변수에 고른 명언을 담기
-		rq := rand.Intn(len(quotes))
+		randomQuote := rand.Intn(len(quotes))
 
 		// 6. 고른 명언 반환
-		res = quotes[rq]
+		res = quotes[randomQuote]
 
 		// 7. rq를 지우고 새 map에 담기
-		delete(quotes, rq)
+		delete(quotes, randomQuote)
 
 		// 8. 명언2(quotesOrgin) 에 명언1(quotes) 담기
 		quotesOrigin = quotes
 
 		// 9. 전역변수에 res담기
-		qow = res
+		quoteOfTheWeek = res
+		if quoteOfTheWeek == nil {
+			return
+		}
 	}
-	// 플래그에 weekDay 담아놓기
+	// flag에 weekDay 담아놓기
 	flag = weekDay
 
-	return qow, err
+	return quoteOfTheWeek, err
 
 }
 
