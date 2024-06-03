@@ -12,6 +12,7 @@ type DexRepository interface {
 	FindDexDetailById(id int) (res *entity.Detail, err error)
 	FindUserDexById(eventId int, userId int) (res int, err error)
 	CreateUserDexById(eventId int, userId int) (err error)
+	GetQuote() (quote []entity.Quote, err error)
 	GetTags() (result []entity.Tag, err error)
 	CountEvents() (count int64, err error)
 	CountUserEvents(userId uint64) (count int64, err error)
@@ -94,9 +95,10 @@ func (g *gormDexRepository) CreateUserDexById(eventId int, userId int) (err erro
 	return
 }
 
+// 태그 목록 조회
 func (g *gormDexRepository) GetTags() (result []entity.Tag, err error) {
 	// select "id", name
-	// from tag t;
+	//   from tag t;
 
 	tx := g.db.Select("id", "name").Find(&result)
 
@@ -121,6 +123,15 @@ func (g *gormDexRepository) CountUserEvents(userId uint64) (count int64, err err
 	//  where user_id = 1
 	// 	  and deleted_at is null ;
 	err = g.db.Model(&entity.UserDex{}).Where("user_id = ? AND deleted_at is null", userId).Count(&count).Error
+
+	return
+}
+
+// 명언 전체 조회
+func (g *gormDexRepository) GetQuote() (quote []entity.Quote, err error) {
+	// 	select *
+	//    from "quote" q
+	err = g.db.Find(&quote).Error
 
 	return
 }

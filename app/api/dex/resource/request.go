@@ -11,3 +11,7 @@ type CreateEventRequest struct {
 	UserId  int
 	EventId int `json:"id"`
 }
+
+type GetQuoteRequest struct {
+	Id uint `json:"id"`
+}
