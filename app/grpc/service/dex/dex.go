@@ -23,11 +23,11 @@ func (s *server) FindDexEvent(ctx context.Context, in *dex.DexEventRequest) (res
 	res = new(dex.DexEventResponse)
 
 	// 1. 만들어진 레포지토리 두개를 사용해서 각각 데이터를 가져온다
-	dexEvent, err := dexReposiroty.FindDexEventById(int(in.EventId))
+	dexEvent, err := dexReposiroty.FindDexEventByEventId(int(in.EventId))
 	if err != nil {
 		return nil, err
 	}
-	dexDetail, err := dexReposiroty.FindDexDetailById(int(in.EventId))
+	dexDetail, err := dexReposiroty.FindDexDetailByEventId(int(in.EventId))
 	if err != nil {
 		return nil, err
 	}
