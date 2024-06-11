@@ -15,7 +15,7 @@ type server struct {
 }
 
 // 사건 보유 여부 grpc
-func FindIsCollectEventByUserId(ctx context.Context, in *iscollect.IsCollectRequest) (*iscollect.IsCollectResponse, error) {
+func GetIsCollect(ctx context.Context, in *iscollect.IsCollectRequest) (*iscollect.IsCollectResponse, error) {
 	// 1. userid와 eventid일치 카운트 함수 호출
 	decCount, err := repository.NewRepository().FindUserDexById(int(in.EventId), int(in.UserId))
 	if err != nil {

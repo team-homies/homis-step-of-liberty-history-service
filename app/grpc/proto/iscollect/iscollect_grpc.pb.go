@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IsCollectServiceClient interface {
-	FindIsCollect(ctx context.Context, in *IsCollectRequest, opts ...grpc.CallOption) (*IsCollectResponse, error)
+	GetIsCollect(ctx context.Context, in *IsCollectRequest, opts ...grpc.CallOption) (*IsCollectResponse, error)
 }
 
 type isCollectServiceClient struct {
@@ -33,9 +33,9 @@ func NewIsCollectServiceClient(cc grpc.ClientConnInterface) IsCollectServiceClie
 	return &isCollectServiceClient{cc}
 }
 
-func (c *isCollectServiceClient) FindIsCollect(ctx context.Context, in *IsCollectRequest, opts ...grpc.CallOption) (*IsCollectResponse, error) {
+func (c *isCollectServiceClient) GetIsCollect(ctx context.Context, in *IsCollectRequest, opts ...grpc.CallOption) (*IsCollectResponse, error) {
 	out := new(IsCollectResponse)
-	err := c.cc.Invoke(ctx, "/grpc.IsCollectService/FindIsCollect", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/grpc.IsCollectService/GetIsCollect", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *isCollectServiceClient) FindIsCollect(ctx context.Context, in *IsCollec
 // All implementations must embed UnimplementedIsCollectServiceServer
 // for forward compatibility
 type IsCollectServiceServer interface {
-	FindIsCollect(context.Context, *IsCollectRequest) (*IsCollectResponse, error)
+	GetIsCollect(context.Context, *IsCollectRequest) (*IsCollectResponse, error)
 	mustEmbedUnimplementedIsCollectServiceServer()
 }
 
@@ -54,8 +54,8 @@ type IsCollectServiceServer interface {
 type UnimplementedIsCollectServiceServer struct {
 }
 
-func (UnimplementedIsCollectServiceServer) FindIsCollect(context.Context, *IsCollectRequest) (*IsCollectResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindIsCollect not implemented")
+func (UnimplementedIsCollectServiceServer) GetIsCollect(context.Context, *IsCollectRequest) (*IsCollectResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIsCollect not implemented")
 }
 func (UnimplementedIsCollectServiceServer) mustEmbedUnimplementedIsCollectServiceServer() {}
 
@@ -70,20 +70,20 @@ func RegisterIsCollectServiceServer(s grpc.ServiceRegistrar, srv IsCollectServic
 	s.RegisterService(&IsCollectService_ServiceDesc, srv)
 }
 
-func _IsCollectService_FindIsCollect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _IsCollectService_GetIsCollect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IsCollectRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(IsCollectServiceServer).FindIsCollect(ctx, in)
+		return srv.(IsCollectServiceServer).GetIsCollect(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc.IsCollectService/FindIsCollect",
+		FullMethod: "/grpc.IsCollectService/GetIsCollect",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IsCollectServiceServer).FindIsCollect(ctx, req.(*IsCollectRequest))
+		return srv.(IsCollectServiceServer).GetIsCollect(ctx, req.(*IsCollectRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,8 +96,8 @@ var IsCollectService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*IsCollectServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "FindIsCollect",
-			Handler:    _IsCollectService_FindIsCollect_Handler,
+			MethodName: "GetIsCollect",
+			Handler:    _IsCollectService_GetIsCollect_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

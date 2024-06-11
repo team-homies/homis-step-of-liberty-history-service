@@ -5,7 +5,7 @@ package grpc;
 option go_package= "main/app/grpc/proto/iscollect";
 
 service IsCollectService {
-    rpc FindIsCollect (IsCollectRequest) returns (IsCollectResponse) {}
+    rpc GetIsCollect (IsCollectRequest) returns (IsCollectResponse) {}
   }
   
   message IsCollectRequest {
