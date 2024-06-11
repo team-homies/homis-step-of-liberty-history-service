@@ -2,7 +2,6 @@ package iscollect
 
 import (
 	"context"
-	"main/app/grpc/proto/dex"
 	"main/app/grpc/proto/iscollect"
 	"main/database/repository"
 
@@ -11,11 +10,10 @@ import (
 
 type server struct {
 	iscollect.IsCollectServiceServer
-	dex.DexEventServiceServer
 }
 
 // 사건 보유 여부 grpc
-func GetIsCollect(ctx context.Context, in *iscollect.IsCollectRequest) (*iscollect.IsCollectResponse, error) {
+func (s *server) GetIsCollect(ctx context.Context, in *iscollect.IsCollectRequest) (*iscollect.IsCollectResponse, error) {
 	// 1. userid와 eventid일치 카운트 함수 호출
 	decCount, err := repository.NewRepository().FindUserDexById(int(in.EventId), int(in.UserId))
 	if err != nil {
@@ -36,6 +34,6 @@ func GetIsCollect(ctx context.Context, in *iscollect.IsCollectRequest) (*iscolle
 
 }
 
-func RegisterDosageService(grpcServer *grpc.Server) {
+func RegisterService(grpcServer *grpc.Server) {
 	iscollect.RegisterIsCollectServiceServer(grpcServer, &server{})
 }

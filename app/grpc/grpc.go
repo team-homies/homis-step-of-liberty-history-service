@@ -8,6 +8,6 @@ import (
 )
 
 func RegisterServices(grpcServer *grpc.Server) {
-	dex.RegisterDosageService(grpcServer)
-	iscollect.RegisterDosageService(grpcServer)
+	dex.RegisterService(grpcServer)
+	iscollect.RegisterService(grpcServer)
 }
