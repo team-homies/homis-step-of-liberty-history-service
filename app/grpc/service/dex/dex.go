@@ -18,18 +18,18 @@ func RegisterDosageService(grpcServer *grpc.Server) {
 }
 
 // 사건 내용 조회
-func (s *server) FindDexEvent(ctx context.Context, in *dex.DexEventRequest) (res *dex.DexEventResponse, err error) {
+func (s *server) GetDetail(ctx context.Context, in *dex.DexEventRequest) (res *dex.DexEventResponse, err error) {
 	dexReposiroty := repository.NewRepository()
 	res = new(dex.DexEventResponse)
 
 	// 1. 만들어진 레포지토리 두개를 사용해서 각각 데이터를 가져온다
 	dexEvent, err := dexReposiroty.FindDexEventByEventId(int(in.EventId))
 	if err != nil {
-		return nil, err
+		return
 	}
 	dexDetail, err := dexReposiroty.FindDexDetailByEventId(int(in.EventId))
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	// 2. 가져온 데이터를 하나의 객체(res)에 합친다
@@ -46,7 +46,6 @@ func (s *server) FindDexEvent(ctx context.Context, in *dex.DexEventRequest) (res
 		},
 	}
 
-	// 3. 리턴한다
 	return
 }
 

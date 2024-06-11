@@ -6,7 +6,7 @@ option go_package= "main/app/grpc/proto/dex";
 
 // protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./app/grpc/proto/dex/dex.proto
 service DexEventService {
-    rpc FindDexEvent (DexEventRequest) returns (DexEventResponse) {}
+    rpc GetDetail (DexEventRequest) returns (DexEventResponse) {}
     rpc GetRate (RateRequest) returns (RateResponse) {}
   }
   
