@@ -14,5 +14,5 @@ service IsCollectService {
   }
   
   message IsCollectResponse {
-      string Division = 1;
+      bool IsCollect = 1;
   }

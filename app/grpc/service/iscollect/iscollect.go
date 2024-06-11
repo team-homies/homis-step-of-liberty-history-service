@@ -25,12 +25,12 @@ func FindIsCollectEventByUserId(ctx context.Context, in *iscollect.IsCollectRequ
 	if decCount != 0 {
 		// 보유한 사건이 0이 아니라면
 		return &iscollect.IsCollectResponse{
-			Division: "ture",
+			IsCollect: true,
 		}, err
 	} else {
 		// 보유한 사건이 0이라면
 		return &iscollect.IsCollectResponse{
-			Division: "false",
+			IsCollect: false,
 		}, err
 	}
 
