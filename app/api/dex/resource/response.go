@@ -7,11 +7,14 @@ type FindEventResponse struct {
 	Detail FindDetailResponse
 }
 type FindDetailResponse struct {
-	Define     string `json:"define"`
-	Outline    string `json:"outline"`
-	Place      string `json:"place"`
-	Background string `json:"background"`
-	ImageUrl   string `json:"image_url"`
+	Place        string `json:"place"`
+	Situation    string `json:"situation"`
+	Organization string `json:"organization"`
+	Person       string `json:"person"`
+	Content      string `json:"content"`
+	Appraisal    string `json:"appraisal"`
+	Reference    string `json:"reference"`
+	ImageUrl     string `json:"image_url"`
 }
 type CreateEventResponse struct {
 	Dex EventResource `json:"dex"`

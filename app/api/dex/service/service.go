@@ -65,11 +65,14 @@ func (d *dexService) FindDexEvent(id int) (res *resource.FindEventResponse, err 
 		Name:  dexEvent.Name,
 		Level: dexEvent.Level,
 		Detail: resource.FindDetailResponse{
-			Define:     dexDetail.Define,
-			Outline:    dexDetail.Outline,
-			Place:      dexDetail.Place,
-			Background: dexDetail.Background,
-			ImageUrl:   dexDetail.ImageUrl,
+			Situation:    dexDetail.Situation,
+			Place:        dexDetail.Place,
+			Organization: dexDetail.Organization,
+			Person:       dexDetail.Person,
+			Content:      dexDetail.Content,
+			Appraisal:    dexDetail.Appraisal,
+			Reference:    dexDetail.Reference,
+			ImageUrl:     dexDetail.ImageUrl,
 		},
 	}
 
