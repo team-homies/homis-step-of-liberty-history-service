@@ -10,15 +10,28 @@ var (
 	once     sync.Once
 )
 
-func GetPath() *core.InternalApi {
+// 라우터 path 함수
+func CommentPath() *core.InternalApi {
 	once.Do(func() {
 		instance = &core.InternalApi{
-			Patient: core.PatientPath{
-				GetPatient:    "/patient",
-				GetPatients:   "/patient/list",
-				CreatePatient: "/patient",
-				UpdatePatient: "/patient",
-				DeletePatient: "/patient",
+			Comment: core.CommentPath{
+				FindAllComment: "/:id/comments",
+				CreateComment:  "/:id/comments",
+				UpdateComment:  "/:id/comments",
+				DeleteComment:  "/:id/comments",
+			},
+		}
+	})
+	return instance
+}
+func DexPath() *core.InternalApi {
+	once.Do(func() {
+		instance = &core.InternalApi{
+			Dex: core.DexPath{
+				FindDexEvent:   "/history/:id",
+				CreateDexEvent: "/history",
+				GetTags:        "/tags",
+				GetQuote: "/quotes",
 			},
 		}
 	})
