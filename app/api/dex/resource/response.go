@@ -16,6 +16,11 @@ type FindDetailResponse struct {
 type CreateEventResponse struct {
 	Dex EventResource `json:"dex"`
 }
+type GetQuoteResponse struct {
+	Id       uint   `json:"id"`
+	Content  string `json:"content"`
+	ImageUrl string `json:"image_url"`
+}
 type GetTagsResponse struct {
 	Id   uint   `json:"id"`
 	Name string `json:"name"`

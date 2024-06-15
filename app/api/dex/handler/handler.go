@@ -13,6 +13,7 @@ type handler interface {
 	CreateDexEvent(c *fiber.Ctx) error
 	FindDexEvent(c *fiber.Ctx) error
 	GetTags(c *fiber.Ctx) error
+	GetQuote(c *fiber.Ctx) error
 }
 
 type dexHandler struct {
@@ -63,6 +64,7 @@ func (h *dexHandler) FindDexEvent(c *fiber.Ctx) (err error) {
 	return ctx.HttpOK(res)
 }
 
+// 도감 필터 조회
 func (h *dexHandler) GetTags(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}
 	res, err := h.service.GetTags()
@@ -70,5 +72,14 @@ func (h *dexHandler) GetTags(c *fiber.Ctx) error {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
 
+	return ctx.HttpOK(res)
+}
+// 명언 조회
+func (h *dexHandler) GetQuote(c *fiber.Ctx) error {
+	ctx := fiberkit.FiberKit{C: c}
+	res, err := h.service.GetQuote()
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
 	return ctx.HttpOK(res)
 }

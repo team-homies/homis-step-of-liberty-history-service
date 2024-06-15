@@ -17,4 +17,5 @@ type DexPath struct {
 	FindDexEvent   string
 	CreateDexEvent string
 	GetTags        string
+	GetQuote string
 }
