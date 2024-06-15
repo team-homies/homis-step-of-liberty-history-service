@@ -27,10 +27,6 @@ func (s *server) GetDetail(ctx context.Context, in *dex.DexEventRequest) (res *d
 	if err != nil {
 		return
 	}
-	dexDetail, err := dexReposiroty.FindDexDetailByEventId(int(in.EventId))
-	if err != nil {
-		return
-	}
 
 	// 2. 가져온 데이터를 하나의 객체(res)에 합친다
 
@@ -38,11 +34,11 @@ func (s *server) GetDetail(ctx context.Context, in *dex.DexEventRequest) (res *d
 		Name:  dexEvent.Name,
 		Level: dexEvent.Level,
 		EventDetail: &dex.Detail{
-			Define:     dexDetail.Define,
-			Outline:    dexDetail.Outline,
-			Place:      dexDetail.Place,
-			Background: dexDetail.Background,
-			ImageUrl:   dexDetail.ImageUrl,
+			Define:     dexEvent.Define,
+			Outline:    dexEvent.Outline,
+			Place:      dexEvent.Place,
+			Background: dexEvent.Background,
+			ImageUrl:   dexEvent.ImageUrl,
 		},
 	}
 

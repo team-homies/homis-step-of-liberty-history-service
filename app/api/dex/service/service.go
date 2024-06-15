@@ -28,12 +28,12 @@ func (s *dexService) CreateUserDex(req *resource.CreateEventRequest) (err error)
 	countDex, err := dexReposiroty.FindUserDexByEventId(req.EventId, req.UserId)
 	// 2. 만약 값이 0이 아니면 에러 반환
 	if countDex != 0 {
-		return err
+		return
 		// 3. 만약 값이 0이면 Create 반환
 	} else {
-		err := dexReposiroty.CreateUserDexByEventId(req.EventId, req.UserId)
+		err = dexReposiroty.CreateUserDexByEventId(req.EventId, req.UserId)
 		if err != nil {
-			return err
+			return
 		}
 
 	}
@@ -49,11 +49,7 @@ func (d *dexService) FindDexEvent(id int) (res *resource.FindEventResponse, err 
 	// 1. 만들어진 레포지토리 두개를 사용해서 각각 데이터를 가져온다
 	dexEvent, err := dexReposiroty.FindDexEventByEventId(id)
 	if err != nil {
-		return nil, err
-	}
-	dexDetail, err := dexReposiroty.FindDexDetailByEventId(id)
-	if err != nil {
-		return nil, err
+		return
 	}
 
 	// 2. 가져온 데이터를 하나의 객체(res)에 합친다
@@ -62,16 +58,15 @@ func (d *dexService) FindDexEvent(id int) (res *resource.FindEventResponse, err 
 		Name:  dexEvent.Name,
 		Level: dexEvent.Level,
 		Detail: resource.FindDetailResponse{
-			Define:     dexDetail.Define,
-			Outline:    dexDetail.Outline,
-			Place:      dexDetail.Place,
-			Background: dexDetail.Background,
-			ImageUrl:   dexDetail.ImageUrl,
+			Define:     dexEvent.Define,
+			Outline:    dexEvent.Outline,
+			Place:      dexEvent.Place,
+			Background: dexEvent.Background,
+			ImageUrl:   dexEvent.ImageUrl,
 		},
 	}
 
-	// 3. 리턴한다
-	return res, nil
+	return
 }
 
 func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
