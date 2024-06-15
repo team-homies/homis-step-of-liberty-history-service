@@ -1,6 +1,7 @@
 package dex
 
 import (
+	"main/app/api/dex/resource"
 	"main/database/entity"
 
 	"gorm.io/gorm"
@@ -8,10 +9,9 @@ import (
 
 // Dex 레포지토리 인터페이스
 type DexRepository interface {
-	FindDexEventById(id int) (res *entity.Event, err error)
-	FindDexDetailById(id int) (res *entity.Detail, err error)
-	FindUserDexById(eventId int, userId int) (res int, err error)
-	CreateUserDexById(eventId int, userId int) (err error)
+	FindDexEventByEventId(eventId int) (res *resource.EventJoinResource, err error)
+	FindUserDexByEventId(eventId int, userId int) (res int, err error)
+	CreateUserDexByEventId(eventId int, userId int) (err error)
 	GetQuote() (quote []entity.Quote, err error)
 	GetTags() (result []entity.Tag, err error)
 	CountEvents() (count int64, err error)
@@ -27,32 +27,16 @@ func NewDexRepository(db *gorm.DB) DexRepository {
 }
 
 // [사건 내용 조회] 사건 id로 조회 select문
-func (g *gormDexRepository) FindDexEventById(id int) (res *entity.Event, err error) {
-	// 1. 쿼리작성
+func (g *gormDexRepository) FindDexEventByEventId(eventId int) (res *resource.EventJoinResource, err error) {
 	// select  e.name, e.level, d.define, d.outline, d.place, d.background, d.image_url
 	//   from "event" e, "detail" d
 	//  where e.id = d.event_id;
 
-	// 2. gorm로직
-	tx := g.db
-	err = tx.Model(&entity.Event{}).Select("name", "level").Where("id = ?", id).First(&res).Error
-
-	if err != nil {
-		return
-	}
-	return
-}
-
-// [사건 내용 조회] 사건 detail id로 조회 select문
-func (g *gormDexRepository) FindDexDetailById(id int) (res *entity.Detail, err error) {
-	// 1. 쿼리작성
-	// select  e.name, e.level, d.define, d.outline, d.place, d.background, d.image_url
-	//   from "event" e, "detail" d
-	//  where e.id = d.event_id;
-
-	// 2. gorm로직
-	tx := g.db
-	err = tx.Model(&entity.Detail{}).Select("define", "outline", "place", "background", "image_url").Where("event_id = ?", id).First(&res).Error
+	// 1. gorm로직
+	err = g.db.Model(&entity.Event{}).
+		Select("Event.name, Event.level, Detail.define, Detail.outline, Detail.place, Detail.background, Detail.image_url").
+		Joins("JOIN Detail ON Detail.event_id = Event.id AND Event.id = ?", eventId).
+		Find(&res).Error
 
 	if err != nil {
 		return
@@ -61,7 +45,7 @@ func (g *gormDexRepository) FindDexDetailById(id int) (res *entity.Detail, err e
 }
 
 // [사용자 사건 수집 등록] 사건 id로 조회 select문 : 사건보유 여부 위함
-func (g *gormDexRepository) FindUserDexById(eventId int, userId int) (res int, err error) {
+func (g *gormDexRepository) FindUserDexByEventId(eventId int, userId int) (res int, err error) {
 	// 1. 쿼리작성
 	// select * from userdex where event_id = 1 and user_id = 1
 
@@ -76,7 +60,7 @@ func (g *gormDexRepository) FindUserDexById(eventId int, userId int) (res int, e
 }
 
 // [사용자 사건 수집 등록] 사건 id로 등록 post문
-func (g *gormDexRepository) CreateUserDexById(eventId int, userId int) (err error) {
+func (g *gormDexRepository) CreateUserDexByEventId(eventId int, userId int) (err error) {
 	// 1. 쿼리작성
 	// insert into userdex (event_id, user_id)
 	// values (1, 1)
