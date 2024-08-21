@@ -4,6 +4,7 @@ import (
 	"main/app/api/dex/resource"
 	"main/database/repository"
 	"math/rand"
+	"strconv"
 	"time"
 )
 
@@ -12,6 +13,7 @@ type DexService interface {
 	GetTags() (res []resource.GetTagsResponse, err error)
 	FindDexEvent(id int) (res *resource.FindEventResponse, err error)
 	CreateUserDex(req *resource.CreateEventRequest) (err error)
+	GetRates() (res []resource.GetRatesResponse, err error)
 }
 
 func NewDexService() DexService {
@@ -159,3 +161,58 @@ func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
 }
 
 // 월요일이 아니면 랜덤 로직이 안돌게 하지만 월요일에 최초로 호출된 경우의 명언을 보여줘야해요
+
+// 도감 수집률 목록 조회
+func (d *dexService) GetRates() (res []resource.GetRatesResponse, err error) {
+	res = []resource.GetRatesResponse{}
+	userSlice := []int{}
+	// 1. 모든 유저 가져오기
+	user, err := repository.NewRepository().FindAllUserId()
+	if err != nil {
+		return nil, err
+	}
+
+	// 2. 중복제거
+	for _, id := range user {
+		num := id.UserId
+		userFlag := false
+		for _, v := range userSlice {
+			if num == v {
+				userFlag = true
+				break
+			}
+		}
+		if !userFlag {
+			userSlice = append(userSlice, num)
+		}
+	}
+
+	// 3. 전체 이벤트 개수 조회
+	countEvent, err := repository.NewRepository().CountEvents()
+	if err != nil {
+		return nil, err
+	}
+
+	// 4. 유저마다 수집률(수집이벤트/전체이벤트) 계산하여 반환
+	for _, id := range userSlice {
+		dexCount, err := repository.NewRepository().CountUserEvents(uint64(id))
+		if err != nil {
+			return nil, err
+		}
+		var rate float64 = float64(dexCount) / float64(countEvent) * 100
+
+		if dexCount == 0 {
+			res = append(res, resource.GetRatesResponse{
+				UserId: id,
+				Rate:   "0",
+			})
+		} else {
+			res = append(res, resource.GetRatesResponse{
+				UserId: id,
+				Rate:   strconv.FormatFloat(rate, 'f', -1, 64),
+			})
+		}
+	}
+
+	return
+}
