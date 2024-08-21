@@ -25,3 +25,9 @@ type GetTagsResponse struct {
 	Id   uint   `json:"id"`
 	Name string `json:"name"`
 }
+
+// GetRates 반환값
+type GetRatesResponse struct {
+	UserId int    `json:"user_id"`
+	Rate   string `json:"content"`
+}
