@@ -1,10 +1,11 @@
 package service
 
 import (
+	"main/app/api/common"
 	"main/app/api/dex/resource"
 	"main/database/repository"
 	"math/rand"
-	"strconv"
+	"sort"
 	"time"
 )
 
@@ -164,8 +165,8 @@ func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
 
 // 도감 수집률 목록 조회
 func (d *dexService) GetRates() (res []resource.GetRatesResponse, err error) {
-	res = []resource.GetRatesResponse{}
-	userSlice := []int{}
+	// userIds 담을 슬라이스
+	userIds := []int{}
 	// 1. 모든 유저 가져오기
 	user, err := repository.NewRepository().FindAllUserId()
 	if err != nil {
@@ -176,42 +177,45 @@ func (d *dexService) GetRates() (res []resource.GetRatesResponse, err error) {
 	for _, id := range user {
 		num := id.UserId
 		userFlag := false
-		for _, v := range userSlice {
+		for _, v := range userIds {
 			if num == v {
 				userFlag = true
 				break
 			}
 		}
 		if !userFlag {
-			userSlice = append(userSlice, num)
+			userIds = append(userIds, num)
 		}
 	}
 
-	// 3. 전체 이벤트 개수 조회
-	countEvent, err := repository.NewRepository().CountEvents()
-	if err != nil {
-		return nil, err
-	}
-
-	// 4. 유저마다 수집률(수집이벤트/전체이벤트) 계산하여 반환
-	for _, id := range userSlice {
-		dexCount, err := repository.NewRepository().CountUserEvents(uint64(id))
+	// 3. 닉네임과 수집률 도출
+	userTables := [][]string{}
+	userTable := make([]string, 2)
+	for _, v := range userIds {
+		if len(userTables) > 200 {
+			break
+		}
+		user, err := common.GetUserListGrpc(uint(v))
 		if err != nil {
 			return nil, err
 		}
-		var rate float64 = float64(dexCount) / float64(countEvent) * 100
+		userTable[0] = user.Nickname
+		userTable[1] = user.Rate
+		userTables = append(userTables, userTable)
+	}
 
-		if dexCount == 0 {
-			res = append(res, resource.GetRatesResponse{
-				UserId: id,
-				Rate:   "0",
-			})
-		} else {
-			res = append(res, resource.GetRatesResponse{
-				UserId: id,
-				Rate:   strconv.FormatFloat(rate, 'f', -1, 64),
-			})
-		}
+	// 4. 익명함수를 이용한 내림차순 정렬
+	sort.Slice(userTables, func(i, j int) bool {
+		return userTables[i][1] > userTables[j][1]
+	})
+
+	// 5. 반환값에 정렬한 순으로 저장
+	for _, userTable := range userTables {
+		res = append(res, resource.GetRatesResponse{
+			Nickname: userTable[0],
+			Rate:     userTable[1],
+		})
+
 	}
 
 	return
