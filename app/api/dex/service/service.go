@@ -189,12 +189,12 @@ func (d *dexService) GetRates() (res []resource.GetRatesResponse, err error) {
 
 	// 3. 닉네임과 수집률 도출
 	userTables := [][]string{}
-	userTable := make([]string, 2)
 	for _, v := range userIds {
 		user, err := common.GetUserListGrpc(uint(v))
 		if err != nil {
 			return nil, err
 		}
+		userTable := make([]string, 2)
 		userTable[0] = user.Nickname
 		userTable[1] = user.Rate
 		userTables = append(userTables, userTable)
@@ -207,6 +207,7 @@ func (d *dexService) GetRates() (res []resource.GetRatesResponse, err error) {
 
 	// 5. 반환값에 정렬한 순으로 저장
 	rank := 1
+	same := 0
 	for i := 0; i < len(userTables); i++ {
 		// 5-1. 순위권 200명 제한
 		if rank > 200 {
@@ -220,16 +221,14 @@ func (d *dexService) GetRates() (res []resource.GetRatesResponse, err error) {
 			})
 			rank++
 			// 5-2. 같은 수집률을 보유하면 같은등수
-		} else if userTables[i][1] == userTables[i-1][1] {
-			res = append(res, resource.GetRatesResponse{
-				Rank:     rank - 1,
-				Nickname: userTables[i][0],
-				Rate:     userTables[i][1],
-			})
-			rank++
 		} else {
+			if userTables[i][1] == userTables[i-1][1] {
+				same++
+			} else {
+				same = 0
+			}
 			res = append(res, resource.GetRatesResponse{
-				Rank:     rank,
+				Rank:     rank - same,
 				Nickname: userTables[i][0],
 				Rate:     userTables[i][1],
 			})
