@@ -15,5 +15,5 @@ const (
 	GRPC_AUTH_PORT       = "grpc.auth.port"
 	GRPC_AUTH_HOST       = "grpc.auth.host"
 	GRPC_MAP_PORT        = "grpc.map.port"
-	GRPC_MAP_HOST        = "grpc.map.port"
+	GRPC_MAP_HOST        = "grpc.map.host"
 )

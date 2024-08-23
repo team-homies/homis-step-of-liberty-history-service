@@ -175,16 +175,15 @@ func (d *dexService) GetRates() (res []resource.GetRatesResponse, err error) {
 
 	// 2. 중복제거
 	for _, id := range user {
-		num := id.UserId
 		userFlag := false
 		for _, v := range userIds {
-			if num == v {
+			if id == v {
 				userFlag = true
 				break
 			}
 		}
 		if !userFlag {
-			userIds = append(userIds, num)
+			userIds = append(userIds, id)
 		}
 	}
 

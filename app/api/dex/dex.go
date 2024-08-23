@@ -19,4 +19,6 @@ func SetDexApis(route fiber.Router) {
 	route.Post(constant.DexPath().Dex.CreateDexEvent, middleware.AuthVerificationMiddleware, h.CreateDexEvent)
 	// 명언 조회
 	route.Get(constant.DexPath().Dex.GetQuote, h.GetQuote)
+	// 도감 수집률 목록 조회
+	route.Get(constant.DexPath().Dex.GetRates, h.GetRates)
 }

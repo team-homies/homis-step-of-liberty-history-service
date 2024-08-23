@@ -16,9 +16,9 @@ func GetUserListGrpc(userId uint) (res *resource.GetRatesResponse, err error) {
 	// 0. grpc 연동
 	var address string
 	if viper.GetString(config.GRPC_AUTH_HOST) == "localhost" {
-		address = viper.GetString(config.GRPC_AUTH_HOST)
+		address = viper.GetString(config.GRPC_AUTH_PORT)
 	} else {
-		address = viper.GetString(config.GRPC_AUTH_HOST) + viper.GetString(config.GRPC_AUTH_HOST)
+		address = viper.GetString(config.GRPC_AUTH_HOST) + viper.GetString(config.GRPC_AUTH_PORT)
 	}
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {

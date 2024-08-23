@@ -34,7 +34,7 @@ func (h *dexHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
 	req := new(resource.CreateEventRequest)
 	ctx.C.BodyParser(req)
 
-	req.UserId = ctx.GetLocalsInt("user_id")
+	req.UserId = ctx.GetLocalsInt("userId")
 
 	// 2. 서비스 함수 실행
 	err = h.service.CreateUserDex(req)
