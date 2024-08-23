@@ -8,6 +8,7 @@ option go_package= "main/app/grpc/proto/dex";
 service DexEventService {
     rpc FindDexEvent (DexEventRequest) returns (DexEventResponse) {}
     rpc GetRate (RateRequest) returns (RateResponse) {}
+    rpc SetEvent (SetEventRequest) returns (SetEventResponse) {}
   }
   
   message DexEventRequest {
@@ -39,3 +40,24 @@ message RateResponse{
     string Rate = 1;
 }
 
+message SetEventRequest{
+    string EventName = 1;
+	string TagName = 2; 
+	string Place = 3;
+	string Situation = 4;
+	string Organization = 5;
+	string Person = 6;
+	string Content = 7;
+	string Appraisal = 8;
+	string Reference = 9;
+	string LocationName = 10;
+	string Address = 11;
+	string AddressRoad = 12;
+}
+
+message SetEventResponse{
+    uint64 EventId =1;
+    string LocationName = 10;
+    string Address = 11;
+    string AddressRoad = 12;
+}

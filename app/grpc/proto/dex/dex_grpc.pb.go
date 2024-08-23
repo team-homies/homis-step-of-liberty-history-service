@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type DexEventServiceClient interface {
 	FindDexEvent(ctx context.Context, in *DexEventRequest, opts ...grpc.CallOption) (*DexEventResponse, error)
 	GetRate(ctx context.Context, in *RateRequest, opts ...grpc.CallOption) (*RateResponse, error)
+	SetEvent(ctx context.Context, in *SetEventRequest, opts ...grpc.CallOption) (*SetEventResponse, error)
 }
 
 type dexEventServiceClient struct {
@@ -52,12 +53,22 @@ func (c *dexEventServiceClient) GetRate(ctx context.Context, in *RateRequest, op
 	return out, nil
 }
 
+func (c *dexEventServiceClient) SetEvent(ctx context.Context, in *SetEventRequest, opts ...grpc.CallOption) (*SetEventResponse, error) {
+	out := new(SetEventResponse)
+	err := c.cc.Invoke(ctx, "/grpc.DexEventService/SetEvent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DexEventServiceServer is the server API for DexEventService service.
 // All implementations must embed UnimplementedDexEventServiceServer
 // for forward compatibility
 type DexEventServiceServer interface {
 	FindDexEvent(context.Context, *DexEventRequest) (*DexEventResponse, error)
 	GetRate(context.Context, *RateRequest) (*RateResponse, error)
+	SetEvent(context.Context, *SetEventRequest) (*SetEventResponse, error)
 	mustEmbedUnimplementedDexEventServiceServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedDexEventServiceServer) FindDexEvent(context.Context, *DexEven
 }
 func (UnimplementedDexEventServiceServer) GetRate(context.Context, *RateRequest) (*RateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRate not implemented")
+}
+func (UnimplementedDexEventServiceServer) SetEvent(context.Context, *SetEventRequest) (*SetEventResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetEvent not implemented")
 }
 func (UnimplementedDexEventServiceServer) mustEmbedUnimplementedDexEventServiceServer() {}
 
@@ -120,6 +134,24 @@ func _DexEventService_GetRate_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DexEventService_SetEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetEventRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DexEventServiceServer).SetEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/grpc.DexEventService/SetEvent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DexEventServiceServer).SetEvent(ctx, req.(*SetEventRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DexEventService_ServiceDesc is the grpc.ServiceDesc for DexEventService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var DexEventService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRate",
 			Handler:    _DexEventService_GetRate_Handler,
+		},
+		{
+			MethodName: "SetEvent",
+			Handler:    _DexEventService_SetEvent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
