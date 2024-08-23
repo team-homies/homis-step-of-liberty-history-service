@@ -28,6 +28,7 @@ type GetTagsResponse struct {
 
 // GetRates 반환값
 type GetRatesResponse struct {
+	Rank     int
 	Nickname string `json:"nickname"`
 	Rate     string
 }
