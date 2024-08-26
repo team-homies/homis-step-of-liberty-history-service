@@ -149,6 +149,20 @@ func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
 	// flag에 weekDay 담아놓기
 	flag = weekDay
 
+	// 요일 찾기 실패시 임시 우회 로직
+	if quoteOfTheWeek == nil {
+		quoteEntities, err := repository.NewRepository().GetQuote()
+		if err != nil {
+			return nil, err
+		}
+		quote := quoteEntities[rand.Intn(len(quoteEntities))]
+		quoteOfTheWeek = &resource.GetQuoteResponse{
+			Id:       quote.ID,
+			Content:  quote.Content,
+			ImageUrl: quote.ImageUrl,
+		}
+	}
+
 	return quoteOfTheWeek, err
 
 }
