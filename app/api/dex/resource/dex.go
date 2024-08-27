@@ -20,3 +20,13 @@ type DetailResource struct {
 	Background string `json:"background"`
 	ImageUrl   string `json:"image_url"`
 }
+
+type EventJoinResource struct {
+	Name       string `json:"name"`
+	Level      string `json:"level"`
+	Define     string `json:"define"`
+	Outline    string `json:"outline"`
+	Place      string `json:"place"`
+	Background string `json:"background"`
+	ImageUrl   string `json:"image_url"`
+}

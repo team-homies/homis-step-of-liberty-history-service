@@ -31,15 +31,15 @@ type dexService struct {
 func (s *dexService) CreateUserDex(req *resource.CreateEventRequest) (err error) {
 	dexReposiroty := repository.NewRepository()
 	// 1. userId와 dexId가 일치하는 값 참거짓 구분
-	countDex, err := dexReposiroty.FindUserDexById(req.EventId, req.UserId)
+	countDex, err := dexReposiroty.FindUserDexByEventId(req.EventId, req.UserId)
 	// 2. 만약 값이 0이 아니면 에러 반환
 	if countDex != 0 {
-		return err
+		return
 		// 3. 만약 값이 0이면 Create 반환
 	} else {
-		err := dexReposiroty.CreateUserDexById(req.EventId, req.UserId)
+		err = dexReposiroty.CreateUserDexByEventId(req.EventId, req.UserId)
 		if err != nil {
-			return err
+			return
 		}
 
 	}
@@ -53,13 +53,9 @@ func (d *dexService) FindDexEvent(id int) (res *resource.FindEventResponse, err 
 	res = new(resource.FindEventResponse)
 
 	// 1. 만들어진 레포지토리 두개를 사용해서 각각 데이터를 가져온다
-	dexEvent, err := dexReposiroty.FindDexEventById(id)
+	dexEvent, err := dexReposiroty.FindDexEventByEventId(id)
 	if err != nil {
-		return nil, err
-	}
-	dexDetail, err := dexReposiroty.FindDexDetailById(id)
-	if err != nil {
-		return nil, err
+		return
 	}
 
 	// 2. 가져온 데이터를 하나의 객체(res)에 합친다
@@ -68,16 +64,15 @@ func (d *dexService) FindDexEvent(id int) (res *resource.FindEventResponse, err 
 		Name:  dexEvent.Name,
 		Level: dexEvent.Level,
 		Detail: resource.FindDetailResponse{
-			Define:     dexDetail.Define,
-			Outline:    dexDetail.Outline,
-			Place:      dexDetail.Place,
-			Background: dexDetail.Background,
-			ImageUrl:   dexDetail.ImageUrl,
+			Define:     dexEvent.Define,
+			Outline:    dexEvent.Outline,
+			Place:      dexEvent.Place,
+			Background: dexEvent.Background,
+			ImageUrl:   dexEvent.ImageUrl,
 		},
 	}
 
-	// 3. 리턴한다
-	return res, nil
+	return
 }
 
 // 도감 필터 조회
@@ -156,6 +151,20 @@ func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
 	}
 	// flag에 weekDay 담아놓기
 	flag = weekDay
+
+	// 요일 찾기 실패시 임시 우회 로직
+	if quoteOfTheWeek == nil {
+		quoteEntities, err := repository.NewRepository().GetQuote()
+		if err != nil {
+			return nil, err
+		}
+		quote := quoteEntities[rand.Intn(len(quoteEntities))]
+		quoteOfTheWeek = &resource.GetQuoteResponse{
+			Id:       quote.ID,
+			Content:  quote.Content,
+			ImageUrl: quote.ImageUrl,
+		}
+	}
 
 	return quoteOfTheWeek, err
 

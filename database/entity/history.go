@@ -21,12 +21,15 @@ func (Event) TableName() string {
 
 type Detail struct {
 	gorm.Model
-	EventId    int    `gorm:"column:event_id;foreignKey:EventId;"`
-	Define     string `gorm:"column:define"`
-	Outline    string `gorm:"column:outline"`
-	Place      string `gorm:"column:place"`
-	Background string `gorm:"column:background"`
-	ImageUrl   string `gorm:"column:image_url"`
+	EventId      int    `gorm:"column:event_id;foreignKey:EventId;"`
+	Place        string `gorm:"column:place"`
+	Situation    string `gorm:"column:situation"`
+	Organization string `gorm:"column:organization"`
+	Person       string `gorm:"column:person"`
+	Content      string `gorm:"column:content"`
+	Appraisal    string `gorm:"column:appraisal"`
+	Reference    string `gorm:"column:reference"`
+	ImageUrl     string `gorm:"column:image_url"`
 }
 
 func (Detail) TableName() string {
