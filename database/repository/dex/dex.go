@@ -10,6 +10,7 @@ import (
 // Dex 레포지토리 인터페이스
 type DexRepository interface {
 	FindDexEventByEventId(eventId int) (res *resource.EventJoinResource, err error)
+	FindDexEventsByUserId(userId uint64) (res []entity.UserDex, err error)
 	FindUserDexByEventId(eventId int, userId int) (res int, err error)
 	CreateUserDexByEventId(eventId int, userId int) (err error)
 	GetQuote() (quote []entity.Quote, err error)
@@ -41,6 +42,16 @@ func (g *gormDexRepository) FindDexEventByEventId(eventId int) (res *resource.Ev
 	if err != nil {
 		return
 	}
+	return
+}
+
+func (g *gormDexRepository) FindDexEventsByUserId(userId uint64) (res []entity.UserDex, err error) {
+	err = g.db.Preload("Event").Preload("Event.Detail").Preload("Event.Tags").
+		Where("user_id = ?", userId).
+		Joins("LEFT JOIN event e ON userdex.event_id = e.id").
+		Joins("LEFT JOIN detail d ON e.id = d.event_id").
+		Find(&res).Error
+
 	return
 }
 

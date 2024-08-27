@@ -4,12 +4,14 @@ import (
 	"main/app/api/dex/resource"
 	"main/app/api/dex/service"
 	"main/common/fiberkit"
+	"main/constant/common"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type handler interface {
+	GetDexEvents(c *fiber.Ctx) error
 	CreateDexEvent(c *fiber.Ctx) error
 	FindDexEvent(c *fiber.Ctx) error
 	GetTags(c *fiber.Ctx) error
@@ -24,6 +26,19 @@ func NewDexHandler() handler {
 	return &dexHandler{
 		service: service.NewDexService(),
 	}
+}
+
+func (h *dexHandler) GetDexEvents(c *fiber.Ctx) (err error) {
+	ctx := fiberkit.FiberKit{C: c}
+
+	userId := ctx.C.Locals(common.LOCALS_USER_ID).(uint64)
+
+	tag := c.Query("tag")
+	keyword := c.Query("keyword")
+
+	result, err := h.service.GetDexEvents(userId, tag, keyword)
+
+	return ctx.HttpOK(result)
 }
 
 // [사용자 사건 수집 등록] 사건 id로 등록 post문 : 핸들러
@@ -74,6 +89,7 @@ func (h *dexHandler) GetTags(c *fiber.Ctx) error {
 
 	return ctx.HttpOK(res)
 }
+
 // 명언 조회
 func (h *dexHandler) GetQuote(c *fiber.Ctx) error {
 	ctx := fiberkit.FiberKit{C: c}

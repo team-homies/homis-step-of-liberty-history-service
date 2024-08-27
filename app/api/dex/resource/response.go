@@ -25,3 +25,12 @@ type GetTagsResponse struct {
 	Id   uint   `json:"id"`
 	Name string `json:"name"`
 }
+type GetDexEventsResponse struct {
+	Histories []HistoryResponse `json:"histories"`
+}
+type HistoryResponse struct {
+	Id    uint     `json:"id"`
+	Name  string   `json:"name"`
+	Place string   `json:"place"`
+	Tag   []string `json:"tag"`
+}

@@ -10,6 +10,7 @@ import (
 type DexService interface {
 	GetQuote() (res *resource.GetQuoteResponse, err error)
 	GetTags() (res []resource.GetTagsResponse, err error)
+	GetDexEvents(userId uint64, tag string, keyword string) (res *resource.GetDexEventsResponse, err error)
 	FindDexEvent(id int) (res *resource.FindEventResponse, err error)
 	CreateUserDex(req *resource.CreateEventRequest) (err error)
 }
@@ -87,6 +88,50 @@ func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
 		})
 	}
 	return res, err
+}
+
+func (d *dexService) GetDexEvents(userId uint64, tag string, keyword string) (res *resource.GetDexEventsResponse, err error) {
+	dexEvents, err := repository.NewRepository().FindDexEventsByUserId(userId)
+	if err != nil {
+		return
+	}
+
+	var histories []resource.HistoryResponse
+	for _, dexEvent := range dexEvents {
+		var tagNames []string
+		for _, tag := range dexEvent.Event.Tags {
+			tagNames = append(tagNames, tag.Name)
+		}
+
+		if tag != "" && !contains(tagNames, tag) {
+			continue
+		}
+
+		event := dexEvent.Event
+		if keyword != "" && event.Name != keyword && event.Detail.Place != keyword {
+			continue
+		}
+
+		histories = append(histories, resource.HistoryResponse{
+			Id:    dexEvent.ID,
+			Name:  event.Name,
+			Place: event.Detail.Place,
+			Tag:   tagNames,
+		})
+	}
+
+	return &resource.GetDexEventsResponse{
+		Histories: histories,
+	}, nil
+}
+
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
 }
 
 // 명언 조회
