@@ -1,6 +1,7 @@
 package service
 
 import (
+	"golang.org/x/exp/slices"
 	"main/app/api/dex/resource"
 	"main/database/repository"
 	"math/rand"
@@ -103,7 +104,7 @@ func (d *dexService) GetDexEvents(userId uint64, tag string, keyword string) (re
 			tagNames = append(tagNames, tag.Name)
 		}
 
-		if tag != "" && !contains(tagNames, tag) {
+		if tag != "" && !slices.Contains(tagNames, tag) {
 			continue
 		}
 
@@ -123,15 +124,6 @@ func (d *dexService) GetDexEvents(userId uint64, tag string, keyword string) (re
 	return &resource.GetDexEventsResponse{
 		Histories: histories,
 	}, nil
-}
-
-func contains(slice []string, item string) bool {
-	for _, s := range slice {
-		if s == item {
-			return true
-		}
-	}
-	return false
 }
 
 // 명언 조회
