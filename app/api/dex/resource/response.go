@@ -34,3 +34,10 @@ type HistoryResponse struct {
 	Place string   `json:"place"`
 	Tag   []string `json:"tag"`
 }
+
+// GetRates 반환값
+type GetRatesResponse struct {
+	Rank     int    `json:"rank"`
+	Nickname string `json:"nickname"`
+	Rate     string `json:"rate"`
+}

@@ -16,6 +16,7 @@ type handler interface {
 	FindDexEvent(c *fiber.Ctx) error
 	GetTags(c *fiber.Ctx) error
 	GetQuote(c *fiber.Ctx) error
+	GetRates(c *fiber.Ctx) error
 }
 
 type dexHandler struct {
@@ -48,7 +49,7 @@ func (h *dexHandler) CreateDexEvent(c *fiber.Ctx) (err error) {
 	req := new(resource.CreateEventRequest)
 	ctx.C.BodyParser(req)
 
-	req.UserId = ctx.GetLocalsInt("user_id")
+	req.UserId = ctx.GetLocalsInt("userId")
 
 	// 2. 서비스 함수 실행
 	err = h.service.CreateUserDex(req)
@@ -97,5 +98,16 @@ func (h *dexHandler) GetQuote(c *fiber.Ctx) error {
 	if err != nil {
 		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
 	}
+	return ctx.HttpOK(res)
+}
+
+// 도감 수집률 목록 조회
+func (h *dexHandler) GetRates(c *fiber.Ctx) error {
+	ctx := fiberkit.FiberKit{C: c}
+	res, err := h.service.GetRates()
+	if err != nil {
+		return ctx.HttpFail(err.Error(), fiber.StatusNotFound)
+	}
+
 	return ctx.HttpOK(res)
 }

@@ -17,6 +17,7 @@ type DexRepository interface {
 	GetTags() (result []entity.Tag, err error)
 	CountEvents() (count int64, err error)
 	CountUserEvents(userId uint64) (count int64, err error)
+	FindAllUserId() (result []int, err error)
 }
 
 type gormDexRepository struct {
@@ -128,5 +129,18 @@ func (g *gormDexRepository) GetQuote() (quote []entity.Quote, err error) {
 	//    from "quote" q
 	err = g.db.Find(&quote).Error
 
+	return
+}
+
+// 전체 userId 목록 조회
+func (g *gormDexRepository) FindAllUserId() (result []int, err error) {
+	// select user_id
+	// from userdex u;
+
+	tx := g.db
+	err = tx.Model(&entity.UserDex{}).Select("user_id").Find(&result).Error
+	if err != nil {
+		return
+	}
 	return
 }

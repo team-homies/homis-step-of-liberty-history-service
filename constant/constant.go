@@ -33,6 +33,7 @@ func DexPath() *core.InternalApi {
 				GetDexEvents:   "/histories",
 				GetTags:        "/tags",
 				GetQuote:       "/quotes",
+				GetRates:       "/Rates",
 			},
 		}
 	})

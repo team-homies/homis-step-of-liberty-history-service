@@ -5,6 +5,7 @@ import (
 	"main/app/api/dex/resource"
 	"main/database/repository"
 	"math/rand"
+	"sort"
 	"time"
 )
 
@@ -14,6 +15,7 @@ type DexService interface {
 	GetDexEvents(userId uint64, tag string, keyword string) (res *resource.GetDexEventsResponse, err error)
 	FindDexEvent(id int) (res *resource.FindEventResponse, err error)
 	CreateUserDex(req *resource.CreateEventRequest) (err error)
+	GetRates() (res []resource.GetRatesResponse, err error)
 }
 
 func NewDexService() DexService {
@@ -205,3 +207,79 @@ func (d *dexService) GetQuote() (res *resource.GetQuoteResponse, err error) {
 }
 
 // 월요일이 아니면 랜덤 로직이 안돌게 하지만 월요일에 최초로 호출된 경우의 명언을 보여줘야해요
+
+// 도감 수집률 목록 조회
+func (d *dexService) GetRates() (res []resource.GetRatesResponse, err error) {
+	// userIds 담을 슬라이스
+	userIds := []int{}
+	// 1. 모든 유저 가져오기
+	user, err := repository.NewRepository().FindAllUserId()
+	if err != nil {
+		return nil, err
+	}
+
+	// 2. 중복제거
+	for _, id := range user {
+		userFlag := false
+		for _, v := range userIds {
+			if id == v {
+				userFlag = true
+				break
+			}
+		}
+		if !userFlag {
+			userIds = append(userIds, id)
+		}
+	}
+
+	// 3. 닉네임과 수집률 도출
+	userTables := [][]string{}
+	for _, v := range userIds {
+		user, err := common.GetUserListGrpc(uint(v))
+		if err != nil {
+			return nil, err
+		}
+		userTable := make([]string, 2)
+		userTable[0] = user.Nickname
+		userTable[1] = user.Rate
+		userTables = append(userTables, userTable)
+	}
+
+	// 4. 익명함수를 이용한 내림차순 정렬
+	sort.Slice(userTables, func(i, j int) bool {
+		return userTables[i][1] > userTables[j][1]
+	})
+
+	// 5. 반환값에 정렬한 순으로 저장
+	rank := 1
+	same := 0
+	for i := 0; i < len(userTables); i++ {
+		// 5-1. 순위권 200명 제한
+		if rank > 200 {
+			break
+		}
+		if i == 0 {
+			res = append(res, resource.GetRatesResponse{
+				Rank:     rank,
+				Nickname: userTables[i][0],
+				Rate:     userTables[i][1],
+			})
+			rank++
+			// 5-2. 같은 수집률을 보유하면 같은등수
+		} else {
+			if userTables[i][1] == userTables[i-1][1] {
+				same++
+			} else {
+				same = 0
+			}
+			res = append(res, resource.GetRatesResponse{
+				Rank:     rank - same,
+				Nickname: userTables[i][0],
+				Rate:     userTables[i][1],
+			})
+			rank++
+		}
+	}
+
+	return
+}
