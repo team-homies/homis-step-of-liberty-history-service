@@ -51,7 +51,6 @@ func (g *gormDexRepository) FindUserDexByEventId(eventId int, userId int) (res i
 	// select * from userdex where event_id = 1 and user_id = 1
 
 	// 2. gorm로직
-	var dexCount int64
 	tx := g.db
 	err = tx.Model(&entity.UserDex{}).Where("event_id = ?", eventId).Where("user_id = ?", userId).Count(&dexCount).Error
 	if err != nil {

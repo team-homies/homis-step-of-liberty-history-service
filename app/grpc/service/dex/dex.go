@@ -13,7 +13,7 @@ type server struct {
 	dex.DexEventServiceServer
 }
 
-func RegisterDosageService(grpcServer *grpc.Server) {
+func RegisterService(grpcServer *grpc.Server) {
 	dex.RegisterDexEventServiceServer(grpcServer, &server{})
 }
 
