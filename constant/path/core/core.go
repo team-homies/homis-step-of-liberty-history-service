@@ -16,6 +16,7 @@ type CommentPath struct {
 type DexPath struct {
 	FindDexEvent   string
 	CreateDexEvent string
+	GetDexEvents   string
 	GetTags        string
 	GetQuote       string
 	GetRates       string

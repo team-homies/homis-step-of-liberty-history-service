@@ -1,7 +1,7 @@
 package service
 
 import (
-	"main/app/api/common"
+	"golang.org/x/exp/slices"
 	"main/app/api/dex/resource"
 	"main/database/repository"
 	"math/rand"
@@ -12,6 +12,7 @@ import (
 type DexService interface {
 	GetQuote() (res *resource.GetQuoteResponse, err error)
 	GetTags() (res []resource.GetTagsResponse, err error)
+	GetDexEvents(userId uint64, tag string, keyword string) (res *resource.GetDexEventsResponse, err error)
 	FindDexEvent(id int) (res *resource.FindEventResponse, err error)
 	CreateUserDex(req *resource.CreateEventRequest) (err error)
 	GetRates() (res []resource.GetRatesResponse, err error)
@@ -90,6 +91,41 @@ func (d *dexService) GetTags() (res []resource.GetTagsResponse, err error) {
 		})
 	}
 	return res, err
+}
+
+func (d *dexService) GetDexEvents(userId uint64, tag string, keyword string) (res *resource.GetDexEventsResponse, err error) {
+	dexEvents, err := repository.NewRepository().FindDexEventsByUserId(userId)
+	if err != nil {
+		return
+	}
+
+	var histories []resource.HistoryResponse
+	for _, dexEvent := range dexEvents {
+		var tagNames []string
+		for _, tag := range dexEvent.Event.Tags {
+			tagNames = append(tagNames, tag.Name)
+		}
+
+		if tag != "" && !slices.Contains(tagNames, tag) {
+			continue
+		}
+
+		event := dexEvent.Event
+		if keyword != "" && event.Name != keyword && event.Detail.Place != keyword {
+			continue
+		}
+
+		histories = append(histories, resource.HistoryResponse{
+			Id:    dexEvent.ID,
+			Name:  event.Name,
+			Place: event.Detail.Place,
+			Tag:   tagNames,
+		})
+	}
+
+	return &resource.GetDexEventsResponse{
+		Histories: histories,
+	}, nil
 }
 
 // 명언 조회

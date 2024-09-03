@@ -6,13 +6,11 @@ import (
 
 type Event struct {
 	gorm.Model
-	Name    string `gorm:"column:name;not null"`
-	Level   string `gorm:"column:level;not null"`
-	IsUsed  bool   `gorm:"column:is_used;not null"`
-	Detail  Detail
-	Userdex UserDex
-	Mapping Mapping
-	Comment Comment
+	Name   string `gorm:"column:name;not null"`
+	Level  string `gorm:"column:level;not null"`
+	IsUsed bool   `gorm:"column:is_used;not null"`
+	Detail Detail
+	Tags   []Tag `gorm:"many2many:mapping;foreignKey:ID;joinForeignKey:EventId;References:ID;JoinReferences:TagId"`
 }
 
 func (Event) TableName() string {
@@ -38,8 +36,9 @@ func (Detail) TableName() string {
 
 type UserDex struct {
 	gorm.Model
-	EventId int `gorm:"column:event_id;foreignKey:EventId;"`
-	UserId  int `gorm:"column:user_id;not null"`
+	EventId int   `gorm:"column:event_id;foreignKey:EventId;"`
+	UserId  int   `gorm:"column:user_id;not null"`
+	Event   Event `gorm:"foreignKey:EventId;references:ID"`
 }
 
 func (UserDex) TableName() string {
@@ -48,8 +47,7 @@ func (UserDex) TableName() string {
 
 type Tag struct {
 	gorm.Model
-	Name    string `gorm:"column:name;not null"`
-	Mapping Mapping
+	Name string `gorm:"column:name;not null"`
 }
 
 func (Tag) TableName() string {

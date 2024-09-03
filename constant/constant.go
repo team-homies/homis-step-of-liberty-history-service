@@ -30,6 +30,7 @@ func DexPath() *core.InternalApi {
 			Dex: core.DexPath{
 				FindDexEvent:   "/history/:id",
 				CreateDexEvent: "/history",
+				GetDexEvents:   "/histories",
 				GetTags:        "/tags",
 				GetQuote:       "/quotes",
 				GetRates:       "/Rates",
