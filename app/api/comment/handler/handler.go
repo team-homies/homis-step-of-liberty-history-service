@@ -4,6 +4,7 @@ import (
 	"main/app/api/comment/resource"
 	"main/app/api/comment/service"
 	"main/common/fiberkit"
+	"main/constant/common"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -69,7 +70,7 @@ func (h *commentHandler) CreateComment(c *fiber.Ctx) (err error) {
 	}
 
 	// 2. userId값 받아오기
-	req.UserId = ctx.GetLocalsInt("user_id")
+	req.UserId = ctx.GetLocalsInt(common.LOCALS_USER_ID)
 
 	// 3. 서비스 함수 실행
 	err = h.service.CreateComment(req)
@@ -97,7 +98,7 @@ func (h *commentHandler) UpdateComment(c *fiber.Ctx) (err error) {
 	}
 
 	// 2. userId값 받아오기
-	req.UserId = ctx.GetLocalsInt("user_id")
+	req.UserId = ctx.GetLocalsInt(common.LOCALS_USER_ID)
 
 	// 3. 서비스 함수 실행
 	err = h.service.UpdateComment(req)
@@ -122,7 +123,7 @@ func (h *commentHandler) DeleteComment(c *fiber.Ctx) (err error) {
 	}
 
 	// 2. Id값 받아오기
-	req.UserId = ctx.GetLocalsInt("user_id")
+	req.UserId = ctx.GetLocalsInt(common.LOCALS_USER_ID)
 
 	// 3. 서비스 함수 실행
 	err = h.service.DeleteComment(req)

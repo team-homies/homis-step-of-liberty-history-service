@@ -2,8 +2,8 @@ package resource
 
 // Dex 요청값
 type FindEventRequest struct {
-	// 쿼리
-	EventId int `json:"id" query:"id"`
+	// 패스파라미터
+	EventId int `json:"id" param:"id"`
 }
 
 type CreateEventRequest struct {
