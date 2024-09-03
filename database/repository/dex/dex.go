@@ -10,7 +10,7 @@ import (
 // Dex 레포지토리 인터페이스
 type DexRepository interface {
 	FindDexEventByEventId(eventId int) (res *resource.EventJoinResource, err error)
-	FindUserDexByEventId(eventId int, userId int) (res int, err error)
+	FindUserDexByEventId(eventId int, userId int) (res int64, err error)
 	CreateUserDexByEventId(eventId int, userId int) (err error)
 	GetQuote() (quote []entity.Quote, err error)
 	GetTags() (result []entity.Tag, err error)
@@ -46,13 +46,13 @@ func (g *gormDexRepository) FindDexEventByEventId(eventId int) (res *resource.Ev
 }
 
 // [사용자 사건 수집 등록] 사건 id로 조회 select문 : 사건보유 여부 위함
-func (g *gormDexRepository) FindUserDexByEventId(eventId int, userId int) (res int, err error) {
+func (g *gormDexRepository) FindUserDexByEventId(eventId int, userId int) (res int64, err error) {
 	// 1. 쿼리작성
 	// select * from userdex where event_id = 1 and user_id = 1
 
 	// 2. gorm로직
 	tx := g.db
-	err = tx.Model(&entity.UserDex{}).Where("event_id = ?", eventId).Where("user_id = ?", userId).Count(&dexCount).Error
+	err = tx.Model(&entity.UserDex{}).Where("event_id = ?", eventId).Where("user_id = ?", userId).Count(&res).Error
 	if err != nil {
 		return
 	}
